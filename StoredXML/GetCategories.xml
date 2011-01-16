@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GetCategoriesRequest xmlns="urn:ebay:apis:eBLBaseComponents">
+	<RequesterCredentials>
+		<eBayAuthToken>ABC...123</eBayAuthToken>
+	</RequesterCredentials>
+	<DetailLevel>ReturnAll</DetailLevel>
+	<ErrorLanguage>en_US</ErrorLanguage>
+	<WarningLevel>High</WarningLevel>
+	<CategorySiteID>#CSID</CategorySiteID>
+	<ViewAllNodes>true</ViewAllNodes>
+</GetCategoriesRequest>
