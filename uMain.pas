@@ -13,7 +13,7 @@ uses
   nxsrSqlEngineBase, nxsqlEngine, ExtCtrls, cxStyles, dxSkinscxPCPainter,
   cxCustomData, cxFilter, cxData, cxDataStorage, cxEdit, cxDBData,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGridLevel,
-  cxGridCustomView, cxGrid;
+  cxGridCustomView, cxGrid, CommonTypes;
 
 type
 
@@ -48,12 +48,11 @@ type
     EbayShoppingConnect2: TEbayShoppingConnect;
     GetCategoryInfo1: TGetCategoryInfo;
     dxRibbonStatusBar1: TdxRibbonStatusBar;
-    AdvSmoothSplashScreen1: TAdvSmoothSplashScreen;
     nxsqlngn1: TnxSqlEngine;
     nxqry1: TnxQuery;
     tmrSpeed: TTimer;
     nxtblItems: TnxTable;
-    ds1: TDataSource;
+    dsItems: TDataSource;
     dxbrmngr1Bar5: TdxBar;
     dxbrlrgbtn5: TdxBarLargeButton;
     dxbrmngr1Bar6: TdxBar;
@@ -69,7 +68,6 @@ type
     cxgrdbclmnGrid1DBTableView1Comment: TcxGridDBColumn;
     cxgrdbclmnGrid1DBTableView1CategoryName: TcxGridDBColumn;
     dxbrbtn2: TdxBarButton;
-    dxrbntbRibbon1Tab3: TdxRibbonTab;
     dxbrlrgbtn6: TdxBarLargeButton;
     dxbrmngr1Bar1: TdxBar;
     dxbrmngr1Bar7: TdxBar;
@@ -79,6 +77,49 @@ type
     dxbrlrgbtn10: TdxBarLargeButton;
     dxbrlrgbtn11: TdxBarLargeButton;
     dxbrbtn3: TdxBarButton;
+    nxtblItemsid: TUnsignedAutoIncField;
+    nxtblItemsSiteID: TStringField;
+    nxtblItemsTitle: TStringField;
+    nxtblItemsSubTitle: TStringField;
+    nxtblItemsPrimaryCategory: TLargeintField;
+    nxtblItemsSecondaryCategory: TLargeintField;
+    nxtblItemsCurrency: TStringField;
+    nxtblItemsPrice: TExtendedField;
+    nxtblItemsReservePrice: TExtendedField;
+    nxtblItemsBuyItNowPrice: TExtendedField;
+    nxtblItemsListingType: TStringField;
+    nxtblItemsQuantity: TIntegerField;
+    nxtblItemsLotSize: TIntegerField;
+    nxtblItemsAuctionDuration: TStringField;
+    nxtblItemsPrivateListing: TBooleanField;
+    nxtblItemsShippingService1: TIntegerField;
+    nxtblItemsSS1Price: TExtendedField;
+    nxtblItemsShippingService2: TIntegerField;
+    nxtblItemsSS2Price: TExtendedField;
+    nxtblItemsShippingService3: TIntegerField;
+    nxtblItemsSS3Price: TExtendedField;
+    nxtblItemsSS1Insurance: TExtendedField;
+    nxtblItemsSS2Insurance: TExtendedField;
+    nxtblItemsSS3Insurance: TExtendedField;
+    nxtblItemsInShippingService1: TIntegerField;
+    nxtblItemsISS1Price: TExtendedField;
+    nxtblItemsInShippingService2: TIntegerField;
+    nxtblItemsISS2Price: TExtendedField;
+    nxtblItemsInShippingService3: TIntegerField;
+    nxtblItemsISS3Price: TExtendedField;
+    nxtblItemsISS1Insurance: TExtendedField;
+    nxtblItemsISS2Insurance: TExtendedField;
+    nxtblItemsISS3Insurance: TExtendedField;
+    nxtblItemsInsuranceOptions: TStringField;
+    nxtblItemsDescription: TnxMemoField;
+    nxtblItemsPaymentMethods: TStringField;
+    nxtblItemsShipToLocations: TStringField;
+    nxtblItemsPaymentPolicy: TnxMemoField;
+    nxtblItemsRP_Description: TnxMemoField;
+    nxtblItemsPR_Refund: TStringField;
+    nxtblItemsRP_ReturnsWithin: TStringField;
+    nxtblItemsRP_ReturnsAccepted: TStringField;
+    nxtblItemsRP_ShippingCostPaidBy: TStringField;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure dxBarLargeButton1Click(Sender: TObject);
@@ -114,7 +155,6 @@ type
     FTCount : Integer;
     ApiUsage : Integer;
     procedure SetOperation(op:TOperation);
-    procedure WriteLog(Value : string);
     procedure GetAllCategories(SiteID : SiteCodeType);
     procedure GetDetails(SiteID : SiteCodeType);
     procedure OnGetCategoriesThreadTerminate(Sender: TObject);
@@ -129,13 +169,12 @@ var
 implementation
 
 uses uUserSettings, uLog, TypInfo, functions, AdvStyleIF, uGetCategories, IdThread,
-  uGetDetails, uEbayProfile, uItemEditor, uSiteSelector;
+  uGetDetails, uEbayProfile, uItemEditor, uSiteSelector, HotLog;
 
 {$R *.dfm}
 
 procedure TfmMain.FormDestroy(Sender: TObject);
 begin
-
   IniSettings.Free;
   CatList.Free;
 //  ThreadObjList.Free;
@@ -228,8 +267,27 @@ end;
 procedure TfmMain.FormCreate(Sender: TObject);
 begin
   BasePath := ExtractFileDir(Paramstr(0));
+  hLog.hlWriter.hlFileDef.path := BasePath+'\log';
+  hLog.hlWriter.hlFileDef.UseFileSizeLimit := true;
+  hLog.hlWriter.hlFileDef.LogFileMaxSize := OneMegabyte;
+  hLog.hlWriter.hlFileDef.UseSafeFilenames := true;
+  if hLog.hlWriter.hlFileDef.UseSafeFilenames then
+  begin
+      hLog.hlWriter.hlFileDef.BuildSafeFilename;
+      hLog.hlWriter.hlFileDef.SafegdgMax := 5;
+  end else
+  begin
+      hLog.hlWriter.hlFileDef.ddname :='Applog';
+      hLog.hlWriter.hlFileDef.gdgMax := 5;
+  end;
+  hlog.SetLogFileTimerInterval(OneMinute);
+  hlog.StartLogging;
+
+  hLog.Add('{hms} Start form creation');
   IniSettings := TIniSettings.Create;
+  IniSettings.PBasePath := BasePath;
   IniSettings.Load(BasePath+'/settings.ini');
+  hLog.Add('{hms} Ini loaded');
   CatList := TStringList.Create;
 //  ThreadObjList := TObjectList.Create;
 //  ThreadObjList.OwnsObjects := True;
@@ -261,11 +319,7 @@ begin
           qry.Next;
         end;
       except
-        on E : Exception do
-        begin
-          WriteLog('Exception class name = '+E.ClassName);
-          WriteLog('Exception message = '+E.Message);
-        end;
+        on E : Exception do hlog.AddException(E);
       end;
     finally
       qry.Free;
@@ -275,18 +329,7 @@ end;
 
 procedure TfmMain.ShowSplashScreen(text: string);
 begin
-  if not AdvSmoothSplashScreen1.Showing then begin
-    AdvSmoothSplashScreen1.SetComponentStyle(tsOffice2007Luna);
-    AdvSmoothSplashScreen1.Height := 150;
-    AdvSmoothSplashScreen1.Width := 350;
-    AdvSmoothSplashScreen1.ListItemsSettings.Rect.Top := 30;
-    AdvSmoothSplashScreen1.ListItemsSettings.Rect.Left := 5;
-    AdvSmoothSplashScreen1.ListItems.Clear;
-    AdvSmoothSplashScreen1.Show;
-    AdvSmoothSplashScreen1.ListItems.Add.HTMLText := '<b>'+text+'</b>';
-    AdvSmoothSplashScreen1.Refresh;
-  end
-  else AdvSmoothSplashScreen1.ListItems.Add.HTMLText := '<b>'+text+'</b>';
+
 end;
 
 procedure TfmMain.tmrSpeedTimer(Sender: TObject);
@@ -334,7 +377,7 @@ begin
     qr1.Session := nxsn1;
     qr2.Session := nxsn1;
     tmpstr := Format('Check for %s categories begin',[TmpStrSiteID]);
-    WriteLog(tmpstr);
+    hLog.Add(tmpstr);
     SetOperation(opCheckCategories);
     GetCategoryInfo1.IncludeSelector := [];
     EbayShoppingConnect2.SiteID := SiteID;
@@ -372,7 +415,7 @@ begin
             tmpstr := 'User forced categories download'
           else
             tmpstr := 'Auto categories download';
-          WriteLog(tmpstr);
+          hLog.Add(tmpstr);
           //ShowSplashScreen(tmpstr);
           qr2.SQL.Clear;
           qr2.SQL.Add('delete from categories where SiteCode = ' + QuotedStr
@@ -382,10 +425,10 @@ begin
         end
         else
         begin
-          WriteLog(Format('%s: Check categories for %s end - %s',
+          hLog.Add(Format('%s: Check categories for %s end - %s',
               [DateTimeToStr(Now), TmpStrSiteID,
               GetEnumName(TypeInfo(AckCodeType), ord(OperationResult))]));
-          WriteLog('Categories version is actual');
+          hLog.Add('Categories version is actual');
           categoriesver := StrToInt(GetCategoryInfo1.CategoryVersion);
           { qr2.SQL.Clear;
             qr2.SQL.Add(Format('update Sites set Version = %d, LastUpdated = %s where  GlobalSiteID = %s',[categoriesver, QuotedStr(DateTimeToStr(now)), QuotedStr(TmpStrGlobalID)]));
@@ -395,7 +438,7 @@ begin
         end;
       end;
     except
-      WriteLog(Format('%s: Exception during categories check',[DateTimeToStr(now)]));
+      hLog.Add(Format('%s: Exception during categories check',[DateTimeToStr(now)]));
     end;
   finally
     qr1.Free;
@@ -421,6 +464,14 @@ begin
       FToken         := Token;
       FSiteID        := SiteID;
       FBasePath      := BasePath;
+      FHost             := Host;
+      FServiceURL       := ServiceURL;
+    end;
+    with inisettings.SSLSettings do begin
+      FSSLCertFile      := SSLCertFile;
+      FSSLKeyFile       := SSLKeyFile;
+      FSSLRootCertFile  := SSLRootCertFile;
+      FSSLPassword      := SSLPassword;
     end;
     Start;
   end;
@@ -444,6 +495,14 @@ begin
       FToken         := Token;
       FSiteID        := SiteID;
       FBasePath      := BasePath;
+      FHost             := Host;
+      FServiceURL       := ServiceURL;
+    end;
+    with inisettings.SSLSettings do begin
+      FSSLCertFile      := SSLCertFile;
+      FSSLKeyFile       := SSLKeyFile;
+      FSSLRootCertFile  := SSLRootCertFile;
+      FSSLPassword      := SSLPassword;
     end;
     Start;
   end;
@@ -466,10 +525,9 @@ begin
 //  end;
   i:=(Sender as TGetCategoriesThread).FCategoryVersion;
   tmpstr := Format('%s: Categories Updated. Version %d',[DateTimeToStr(now),i]);
-  WriteLog(tmpstr);
+  hLog.Add(tmpstr);
   //tmpstr := GetEnumName(TypeInfo(Global_ID),ord((Sender as TGetCategoriesThread).FGlobalSiteID)) ;
   SetOperation(opIdle);
-  if AdvSmoothSplashScreen1.Showing then AdvSmoothSplashScreen1.Hide;
   dxRibbonStatusBar1.Panels[4].Text := '';
   qrx := TnxQuery.Create(Self);
   with qrx do begin
@@ -496,9 +554,8 @@ var tmpstr : string;
     qrx : TnxQuery;
 begin
   tmpstr := 'Details Updated.';
-  WriteLog(tmpstr);
+  hLog.Add(tmpstr);
   SetOperation(opIdle);
-  if AdvSmoothSplashScreen1.Showing then AdvSmoothSplashScreen1.Hide;
   dxRibbonStatusBar1.Panels[4].Text := '';
   qrx := TnxQuery.Create(Self);
   with qrx do begin
@@ -515,11 +572,6 @@ begin
   end;
   nxtblSites.Close;
   nxtblSites.Open;
-end;
-
-procedure TfmMain.WriteLog(Value: string);
-begin
-  fmLog.AdvLogMemo.Lines.Add(DateTimeToStr(now)+' : '+Value);
 end;
 
 end.

@@ -23,6 +23,7 @@ type
     Value: String;
     iVal : Integer;
     WorkMode: TWorkMode;
+    FThread : TidThread;
     procedure DoSynchronize; override;
     procedure WriteLog(Logmessage: string);
     procedure SaveLog;
@@ -174,7 +175,8 @@ var inireaderrormsg : string;
 begin
   inherited Create(true);
   FForm := Form;
-  FSyncObj := TTransSync.Create(Self);
+  FSyncObj := TTransSync.Create;
+  FSyncObj.FThread := Self;
   FBasePath := ExtractFileDir(Paramstr(0));
   FLangIniFile := FBasePath+'Settings/languages.ini';
   FLanguages := TStringList.Create;
@@ -256,7 +258,7 @@ begin
         end
       end;
     end;
-    opReturnRes : with Thread as TTranslateThread do begin
+    opReturnRes : with FThread as TTranslateThread do begin
       for i:=0 to Form.ComponentCount -1 do if Form.Components[i].Tag = iVal then begin
         tmpfiledname := Form.Components[i].ClassName;
         if Form.Components[i].ClassName = 'TcxTextEdit' then (Form.Components[i] as TcxTextEdit).Text := Value;

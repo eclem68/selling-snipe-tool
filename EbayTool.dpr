@@ -1,19 +1,20 @@
 program EbayTool;
 
 uses
+  ExceptionLog,
   Forms,
+  HotLog,
   uMain in 'uMain.pas' {fmMain},
   uUserSettings in 'uUserSettings.pas' {fmUserSettings},
   uIniSettings in 'uIniSettings.pas',
   uLog in 'uLog.pas' {fmLog},
   uGetDetails in 'uGetDetails.pas',
-  uTypes in '..\EbayFind2\uTypes.pas',
+  uTypes in 'uTypes.pas',
   uGetCategories in 'uGetCategories.pas',
   uEbayProfile in 'uEbayProfile.pas' {fmEbayProfiles},
   uItemEditor in 'uItemEditor.pas' {fmItemEditor},
   uGetSuggestedCategories in 'uGetSuggestedCategories.pas',
-  uSiteSelector in 'uSiteSelector.pas' {fmSiteSelector},
-  googleTranslator in 'googleTranslator.pas';
+  uSiteSelector in 'uSiteSelector.pas' {fmSiteSelector};
 
 {$R *.res}
 
