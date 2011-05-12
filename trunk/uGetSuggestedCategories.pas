@@ -15,7 +15,8 @@ uses
   DB,
   nxdb,
   Forms,
-  ebaySvc;
+  TradingService,
+  CommonTypes;
 
   type
 
@@ -29,10 +30,8 @@ uses
     iVal : Integer;
     WorkMode: TWorkMode;
     procedure DoSynchronize; override;
-    procedure WriteLog(Logmessage: string);
     procedure IncApiUsage;
     procedure OnSave(Saved,Total : Integer);
-    procedure SaveLog;
     procedure OnHttpWork(AWorkMode: TWorkMode; const AWorkCount: Integer);
   end;
 
@@ -52,7 +51,6 @@ uses
      //procedure SaveDetails(Category:TCatRec);
      procedure GetSuggestedCategoryArray;
      procedure WriteEbayApiExceptionLog(E : Exception);
-     procedure WriteExceptionLog(E : Exception);
      procedure GetSuggestedCategoriesAPIError(Sender: TObject; ErrorRecord: eBayAPIError);
      procedure GetSuggestedCategoriesEndRequest(Sender: TObject);
      procedure GetSuggestedCategoriesStartRequest(Sender: TObject);
@@ -65,6 +63,13 @@ uses
      FToken         : WideString;
      FSiteID        : SiteCodeType;
      FGlobalSiteID  : Global_ID;
+
+     FHost           : ShortString; // 'api.ebay.com';
+     FServiceURL     : ShortString; // 'https://api.ebay.com/ws/api.dll';
+     FSSLCertFile    : ShortString; // 'test_b_crt.pem';
+     FSSLKeyFile     : ShortString; // 'test_b_key.pem';
+     FSSLRootCertFile: ShortString; // 'test_b_ca.pem';
+     FSSLPassword    : ShortString; // 'aaaa';
 
      FCategoryVersion : Integer;
 
@@ -88,7 +93,7 @@ uses
 
 implementation
 
-uses XMLIntf, uMain, functions, uLog, ActiveX, uItemEditor;
+uses XMLIntf, uMain, functions, HotLog, ActiveX, uItemEditor;
 
 { TGetCategoriesThread }
 
@@ -97,7 +102,7 @@ begin
   inherited Create(true);
   FForm := Form;
   FreeOnTerminate := True;
-  FSyncObj := TFTSync.Create(Self);
+  FSyncObj := TFTSync.Create;
 end;
 
 destructor TGetSuggestedCategoriesThread.Destroy;
@@ -113,12 +118,12 @@ begin
     hr := CoInitializeEx(nil, COINIT_APARTMENTTHREADED);
     FEbayTradingConnect := TEbayTradingConnect.Create(nil);
     with FEbayTradingConnect do begin
-      Host := 'api.ebay.com';
-      ServiceURL := 'https://api.ebay.com/ws/api.dll';
-      SSLCertFile := 'test_b_crt.pem';
-      SSLKeyFile := 'test_b_key.pem';
-      SSLRootCertFile := 'test_b_ca.pem';
-      SSLPassword := 'aaaa';
+      Host := FHost;
+      ServiceURL := FServiceURL;
+      SSLCertFile := FSSLCertFile;
+      SSLKeyFile := FSSLKeyFile;
+      SSLRootCertFile := FSSLRootCertFile;
+      SSLPassword := FSSLPassword;
       SiteID := FSiteID;
       AppID := FAppID;
       DevID := FDevID;
@@ -163,52 +168,36 @@ procedure TGetSuggestedCategoriesThread.GetSuggestedCategoriesAPIError(Sender: T
 var i : Integer;
 begin
   with ErrorRecord , FSyncObj do begin
-    WriteLog(Format('ThreadID %d - ApiCall: GetSuggestedCategories. API Error',[Self.ThreadID]));
-    WriteLog(Format('Short Message %s , Error Code %s , Severity Code %s ,Error Classification %s',[ShortMessage, ErrorCode, SeverityCode, ErrorClassification]));
-    WriteLog(Format('Message %s ',[LongMessage]));
+    hlog.Add('{hms}: ApiCall: GetSuggestedCategories. API Error');
+    hlog.Add(Format('Short Message %s , Error Code %s , Severity Code %s ,Error Classification %s',[ShortMessage, ErrorCode, SeverityCode, ErrorClassification]));
+    hlog.Add(Format('Message %s ',[LongMessage]));
   end;
-  FSyncObj.WriteLog('Request XML');
-  for i := 0 to FEbayTradingConnect.RequestXMLText.Count -1 do FSyncObj.WriteLog(FEbayTradingConnect.RequestXMLText.Strings[i]);
-  FSyncObj.WriteLog('Response XML');
-  for i := 0 to FEbayTradingConnect.ResponseXMLText.Count -1 do FSyncObj.WriteLog(FEbayTradingConnect.ResponseXMLText.Strings[i]);
-  FSyncObj.SaveLog;
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Request.xml');
+  hlog.Add('Request XML saved');
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Response.xml');
+  hlog.Add('Response XML saved');
 end;
 
 procedure TGetSuggestedCategoriesThread.GetSuggestedCategoriesEndRequest(Sender: TObject);
 begin
   FGetSuggestedCategories.SaveResponseXMLDoc(fmMain.BasePath+'\GetSuggestedCategories.xml');
-  FSyncObj.WriteLog(Format('ThreadID %d - ApiCall: GetSuggestedCategories. Result %s',[Self.ThreadID,GetEnumName(TypeInfo(AckCodeType),ord(FGetSuggestedCategories.Ack))]));
+  hlog.Add(Format('{hms}: ApiCall: GetSuggestedCategories. Result %s',[GetEnumName(TypeInfo(AckCodeType),ord(FGetSuggestedCategories.Ack))]));
   FSyncObj.IncApiUsage;
 end;
 
 procedure TGetSuggestedCategoriesThread.GetSuggestedCategoriesStartRequest(Sender: TObject);
 begin
-  FSyncObj.WriteLog(Format('ThreadID %d - ApiCall: GetSuggestedCategories. Start request',[Self.ThreadID]));
+  hLog.Add('{hms}: ApiCall: GetSuggestedCategories. Start request');
 end;
 
 procedure TGetSuggestedCategoriesThread.WriteEbayApiExceptionLog(E : Exception);
-var i : Integer;
 begin
-  with FSyncObj do begin
-    WriteLog(Format('%s: ThreadID %d Exception',[DateTimeToStr(now),Self.ThreadID]));
-    WriteLog(Format('Exception class name: %s',[E.ClassName]));
-    WriteLog(Format('Exception message: %s',[E.Message]));
-    WriteLog('Request XML');
-    for i := 0 to FEbayTradingConnect.RequestXMLText.Count -1 do WriteLog(FEbayTradingConnect.RequestXMLText.Strings[i]);
-    WriteLog('Response XML');
-    for i := 0 to FEbayTradingConnect.ResponseXMLText.Count -1 do WriteLog(FEbayTradingConnect.ResponseXMLText.Strings[i]);
-    SaveLog;
-  end;
-end;
-
-procedure TGetSuggestedCategoriesThread.WriteExceptionLog(E: Exception);
-begin
-  with FSyncObj do begin
-    WriteLog(Format('%s: ThreadID %d Exception',[DateTimeToStr(now),Self.ThreadID]));
-    WriteLog(Format('Exception class name: %s',[E.ClassName]));
-    WriteLog(Format('Exception message: %s',[E.Message]));
-    SaveLog;
-  end;
+  hlog.add('{hms}: - ApiCall: GetSuggestedCategories. API Error');
+  hLog.AddException(E);
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Request.xml');
+  hlog.Add('Request XML saved');
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Response.xml');
+  hlog.Add('Response XML saved');
 end;
 
 procedure TGetSuggestedCategoriesThread.EbayTradingConnectWork(ASender: TObject; AWorkMode: TWorkMode; AWorkCount: Int64);
@@ -231,12 +220,8 @@ procedure TFTSync.DoSynchronize;
 begin
   inherited;
   case Operation of
-    OpWriteLogMes : begin
-      fmMain.WriteLog(Value);
-    end;
     OpIncApiUsage : fmMain.IncApiUsage;
     OpOnSave : fmMain.dxRibbonStatusBar1.Panels[4].Text := Value;
-    OpSaveLog : fmLog.AdvLogMemo.Lines.SaveToFile(fmMain.BasePath+'\log\exception.log');
     OpOnWork : begin
       case WorkMode of
         wmRead : begin
@@ -270,19 +255,6 @@ procedure TFTSync.OnSave(Saved, Total: Integer);
 begin
   Operation := OpOnSave;
   Value := Format('Saved %d of %d items',[Saved,Total]);
-  Synchronize;
-end;
-
-procedure TFTSync.SaveLog;
-begin
-  Operation := OpSaveLog;
-  Synchronize;
-end;
-
-procedure TFTSync.WriteLog(Logmessage: string);
-begin
-  Value := Logmessage;
-  Operation := OpWriteLogMes ;
   Synchronize;
 end;
 

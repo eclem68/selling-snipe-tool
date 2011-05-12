@@ -8,6 +8,7 @@ uses
   Variants,
   XMLDoc,
   EbayConnect,
+  CommonTypes,
   TradingServiceXMLClasses,
   IdThread,
   IdComponent,
@@ -27,10 +28,8 @@ uses
     iVal : Integer;
     WorkMode: TWorkMode;
     procedure DoSynchronize; override;
-    procedure WriteLog(Logmessage: string);
     procedure IncApiUsage;
     procedure OnSave(Saved,Total : Integer);
-    procedure SaveLog;
     procedure OnHttpWork(AWorkMode: TWorkMode; const AWorkCount: Integer);
   end;
 
@@ -59,7 +58,6 @@ uses
      //procedure SaveDetails(Category:TCatRec);
      procedure GetAllDetails;
      procedure WriteEbayApiExceptionLog(E : Exception);
-     procedure WriteExceptionLog(E : Exception);
      procedure GetDetailsAPIError(Sender: TObject; ErrorRecord: eBayAPIError);
      procedure GetDetailsEndRequest(Sender: TObject);
      procedure GetDetailsStartRequest(Sender: TObject);
@@ -72,6 +70,13 @@ uses
      FToken         : WideString;
      FSiteID        : SiteCodeType;
      FGlobalSiteID  : Global_ID;
+
+     FHost           : ShortString; // 'api.ebay.com';
+     FServiceURL     : ShortString; // 'https://api.ebay.com/ws/api.dll';
+     FSSLCertFile    : ShortString; // 'test_b_crt.pem';
+     FSSLKeyFile     : ShortString; // 'test_b_key.pem';
+     FSSLRootCertFile: ShortString; // 'test_b_ca.pem';
+     FSSLPassword    : ShortString; // 'aaaa';
 
      FCategoryVersion : Integer;
 
@@ -96,7 +101,7 @@ uses
 
 implementation
 
-uses XMLIntf, uMain, functions, uLog, ActiveX;
+uses XMLIntf, uMain, functions, hotlog, ActiveX;
 
 { TGetCategoriesThread }
 
@@ -105,7 +110,7 @@ begin
   inherited Create(true);
   FForm := Form;
   FreeOnTerminate := True;
-  FSyncObj := TFTSync.Create(Self);
+  FSyncObj := TFTSync.Create;
 end;
 
 destructor TGetDetailsThread.Destroy;
@@ -121,12 +126,12 @@ begin
     hr := CoInitializeEx(nil, COINIT_APARTMENTTHREADED);
     FEbayTradingConnect := TEbayTradingConnect.Create(nil);
     with FEbayTradingConnect do begin
-      Host := 'api.ebay.com';
-      ServiceURL := 'https://api.ebay.com/ws/api.dll';
-      SSLCertFile := 'test_b_crt.pem';
-      SSLKeyFile := 'test_b_key.pem';
-      SSLRootCertFile := 'test_b_ca.pem';
-      SSLPassword := 'aaaa';
+      Host := FHost;
+      ServiceURL := FServiceURL;
+      SSLCertFile := FSSLCertFile;
+      SSLKeyFile := FSSLKeyFile;
+      SSLRootCertFile := FSSLRootCertFile;
+      SSLPassword := FSSLPassword;
       SiteID := FSiteID;
       AppID := FAppID;
       DevID := FDevID;
@@ -139,6 +144,7 @@ begin
     FGeteBayDetails.OnAPIError := GetDetailsAPIError;
     FGeteBayDetails.OnEndRequest := GetDetailsEndRequest;
     FGeteBayDetails.OnStartRequest := GetDetailsStartRequest;
+    FGeteBayDetails.OnAPIError := GetDetailsAPIError;
     FQuery1 := TnxQuery.Create(nil);
     FQuery1.Database := fmMain.nxdtbs1;
     FQuery1.Session := fmMain.nxsn1;
@@ -163,6 +169,7 @@ begin
       SaveDetails;
     end;
     if (FOperationResult in [Failure, PartialFailure]) then begin
+      //GetDetailsAPIError(FGeteBayDetails.Errors);
       Exception.Create('Request Failure');
     end;
   except
@@ -172,30 +179,28 @@ end;
 
 procedure TGetDetailsThread.GetDetailsAPIError(Sender: TObject;
   ErrorRecord: eBayAPIError);
-var i : Integer;
 begin
-  with ErrorRecord , FSyncObj do begin
-    WriteLog(Format('ThreadID %d - ApiCall: GetEbayDetails. API Error',[Self.ThreadID]));
-    WriteLog(Format('Short Message %s , Error Code %s , Severity Code %s ,Error Classification %s',[ShortMessage, ErrorCode, SeverityCode, ErrorClassification]));
-    WriteLog(Format('Message %s ',[LongMessage]));
+  with ErrorRecord  do begin
+    hlog.add('{hms}: - ApiCall: GetEbayDetails. API Error');
+    hlog.add(Format('Short Message %s , Error Code %s , Severity Code %s ,Error Classification %s',[ShortMessage, ErrorCode, SeverityCode, ErrorClassification]));
+    hlog.add(Format('Message %s ',[LongMessage]));
   end;
-  FSyncObj.WriteLog('Request XML');
-  for i := 0 to FEbayTradingConnect.RequestXMLText.Count -1 do FSyncObj.WriteLog(FEbayTradingConnect.RequestXMLText.Strings[i]);
-  FSyncObj.WriteLog('Response XML');
-  for i := 0 to FEbayTradingConnect.ResponseXMLText.Count -1 do FSyncObj.WriteLog(FEbayTradingConnect.ResponseXMLText.Strings[i]);
-  FSyncObj.SaveLog;
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Request.xml');
+  hlog.Add('Request XML saved');
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Response.xml');
+  hlog.Add('Response XML saved');
 end;
 
 procedure TGetDetailsThread.GetDetailsEndRequest(Sender: TObject);
 begin
   //FGeteBayDetails.SaveResponseXMLDoc(fmMain.BasePath+'\GeteBayDetails.xml');
-  FSyncObj.WriteLog(Format('ThreadID %d - ApiCall: GetEbayDetails. Result %s',[Self.ThreadID,GetEnumName(TypeInfo(AckCodeType),ord(FGetEbayDetails.Ack))]));
+  hlog.Add(Format('{hms}: ApiCall: GetEbayDetails. Result %s',[GetEnumName(TypeInfo(AckCodeType),ord(FGetEbayDetails.Ack))]));
   FSyncObj.IncApiUsage;
 end;
 
 procedure TGetDetailsThread.GetDetailsStartRequest(Sender: TObject);
 begin
-  FSyncObj.WriteLog(Format('ThreadID %d - ApiCall: GetEbayDetails. Start request',[Self.ThreadID]));
+  hlog.Add('{hms}: ApiCall: GetEbayDetails. Start request');
 end;
 
 procedure TGetDetailsThread.SaveCountryDetails;
@@ -203,7 +208,7 @@ var i:Integer;
     sid : string;
 begin
   sid := GetEnumName(TypeInfo(SiteCodeType),Ord(FGeteBayDetails.Connector.SiteID));
-  FSyncObj.WriteLog(Format('Start saving Country Details for site %s',[sid]));
+  hlog.Add(Format('{hms}: Start saving Country Details for site %s',[sid]));
   with FQuery1 do
   try
     SQL.Clear;
@@ -226,9 +231,9 @@ begin
       ParamByName('DetailVersion').Value :=  FGeteBayDetails.CountryDetails[i].DetailVersion;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving Country Details for site %s. Saved %d',[sid,FGeteBayDetails.CountryDetails.Count]));
+    hlog.Add(Format('{hms}: End saving Country Details for site %s. Saved %d',[sid,FGeteBayDetails.CountryDetails.Count]));
   except
-    on E : Exception do WriteExceptionLog(E);
+    on E : Exception do hlog.AddException(E);
   end;
 end;
 
@@ -237,7 +242,7 @@ var i:Integer;
     sid : string;
 begin
   sid := GetEnumName(TypeInfo(SiteCodeType),Ord(FGeteBayDetails.Connector.SiteID));
-  FSyncObj.WriteLog(Format('Start saving Currency Details for site %s',[sid]));
+  hlog.Add(Format('{hms}: Start saving Currency Details for site %s',[sid]));
   with FQuery1 do
   try
     SQL.Clear;
@@ -260,9 +265,9 @@ begin
       ParamByName('DetailVersion').Value :=  FGeteBayDetails.CurrencyDetails[i].DetailVersion;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving Currency Details for site %s. Saved %d',[sid,FGeteBayDetails.CurrencyDetails.Count]));
+    hlog.Add(Format('{hms}: End saving Currency Details for site %s. Saved %d',[sid,FGeteBayDetails.CurrencyDetails.Count]));
   except
-    on E : Exception do WriteExceptionLog(E);
+    on E : Exception do hlog.AddException(E);
   end;
 end;
 
@@ -271,7 +276,7 @@ var i:Integer;
     sid : string;
 begin
   sid := GetEnumName(TypeInfo(SiteCodeType),Ord(FGeteBayDetails.Connector.SiteID));
-  FSyncObj.WriteLog(Format('Start saving Dispatch Time Max Details for site %s',[sid]));
+  hlog.Add(Format('{hms}: Start saving Dispatch Time Max Details for site %s',[sid]));
   with FQuery1 do
   try
     SQL.Clear;
@@ -294,9 +299,9 @@ begin
       ParamByName('DetailVersion').Value := FGeteBayDetails.DispatchTimeMaxDetails[i].DetailVersion;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving Dispatch Time Max Details for site %s. Saved %d',[sid,FGeteBayDetails.DispatchTimeMaxDetails.Count]));
+    hlog.Add(Format('{hms}: End saving Dispatch Time Max Details for site %s. Saved %d',[sid,FGeteBayDetails.DispatchTimeMaxDetails.Count]));
   except
-    on E : Exception do WriteExceptionLog(E);
+    on E : Exception do hlog.AddException(E);
   end;
 end;
 
@@ -305,7 +310,7 @@ var i:Integer;
     sid : string;
 begin
   sid := GetEnumName(TypeInfo(SiteCodeType),Ord(FGeteBayDetails.Connector.SiteID));
-  FSyncObj.WriteLog(Format('Start saving Payment Option Details for site %s',[sid]));
+  hlog.Add(Format('{hms}: Start saving Payment Option Details for site %s',[sid]));
   with FQuery1 do
   try
     SQL.Clear;
@@ -328,9 +333,9 @@ begin
       ParamByName('DetailVersion').Value := FGeteBayDetails.PaymentOptionDetails[i].DetailVersion;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving Payment Option Details for site %s. Saved %d',[sid,FGeteBayDetails.PaymentOptionDetails.Count]));
+    hlog.Add(Format('{hms}: End saving Payment Option Details for site %s. Saved %d',[sid,FGeteBayDetails.PaymentOptionDetails.Count]));
   except
-    on E : Exception do WriteExceptionLog(E);
+    on E : Exception do hlog.AddException(E);
   end;
 end;
 
@@ -339,7 +344,7 @@ var i:Integer;
     sid : string;
 begin
   sid := GetEnumName(TypeInfo(SiteCodeType),Ord(FGeteBayDetails.Connector.SiteID));
-  FSyncObj.WriteLog(Format('Start saving Region Details for site %s',[sid]));
+  hlog.Add(Format('{hms}: Start saving Region Details for site %s',[sid]));
   with FQuery1 do
   try
     SQL.Clear;
@@ -362,9 +367,9 @@ begin
       ParamByName('DetailVersion').Value := FGeteBayDetails.RegionDetails[i].DetailVersion;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving Region Details for site %s. Saved %d',[sid,FGeteBayDetails.RegionDetails.Count]));
+    hlog.Add(Format('{hms}: End saving Region Details for site %s. Saved %d',[sid,FGeteBayDetails.RegionDetails.Count]));
   except
-    on E : Exception do WriteExceptionLog(E);
+    on E : Exception do hlog.AddException(E);
   end;
 end;
 
@@ -373,7 +378,7 @@ var i:Integer;
     sid : string;
 begin
   sid := GetEnumName(TypeInfo(SiteCodeType),Ord(FGeteBayDetails.Connector.SiteID));
-  FSyncObj.WriteLog(Format('Start saving Return policy details for site %s',[sid]));
+  hlog.Add(Format('{hms}: Start saving Return policy details for site %s',[sid]));
   with FQuery1 do
   try
     SQL.Clear;
@@ -400,7 +405,7 @@ begin
       ParamByName('SiteID').Value := sid;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving Refund of Return policy details for site %s. Saved %d',[sid,FGeteBayDetails.ReturnPolicyDetails.Refund.Count]));
+    hlog.Add(Format('{hms}: End saving Refund of Return policy details for site %s. Saved %d',[sid,FGeteBayDetails.ReturnPolicyDetails.Refund.Count]));
 
     for I := 0 to FGeteBayDetails.ReturnPolicyDetails.ReturnsWithin.Count - 1 do begin
       ParamByName('Type').Value :=  'ReturnsWithin';
@@ -409,7 +414,7 @@ begin
       ParamByName('SiteID').Value := sid;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving ReturnsWithin of Return policy details for site %s. Saved %d',[sid,FGeteBayDetails.ReturnPolicyDetails.ReturnsWithin.Count]));
+    hlog.Add(Format('{hms}: End saving ReturnsWithin of Return policy details for site %s. Saved %d',[sid,FGeteBayDetails.ReturnPolicyDetails.ReturnsWithin.Count]));
 
     for I := 0 to FGeteBayDetails.ReturnPolicyDetails.ReturnsAccepted.Count - 1 do begin
       ParamByName('Type').Value :=  'ReturnsAccepted';
@@ -418,7 +423,7 @@ begin
       ParamByName('SiteID').Value := sid;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving ReturnsAccepted of Return policy details for site %s. Saved %d',[sid,FGeteBayDetails.ReturnPolicyDetails.ReturnsAccepted.Count]));
+    hlog.Add(Format('{hms}: End saving ReturnsAccepted of Return policy details for site %s. Saved %d',[sid,FGeteBayDetails.ReturnPolicyDetails.ReturnsAccepted.Count]));
 
     for I := 0 to FGeteBayDetails.ReturnPolicyDetails.ShippingCostPaidBy.Count - 1 do begin
       ParamByName('Type').Value :=  'ShippingCostPaidBy';
@@ -427,10 +432,10 @@ begin
       ParamByName('SiteID').Value := sid;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving ShippingCostPaidBy of Return policy details for site %s. Saved %d',[sid,FGeteBayDetails.ReturnPolicyDetails.ShippingCostPaidBy.Count]));
+    hlog.Add(Format('{hms}: End saving ShippingCostPaidBy of Return policy details for site %s. Saved %d',[sid,FGeteBayDetails.ReturnPolicyDetails.ShippingCostPaidBy.Count]));
 
   except
-    on E : Exception do WriteExceptionLog(E);
+    on E : Exception do hlog.AddException(E);
   end;
 end;
 
@@ -439,7 +444,7 @@ var i:Integer;
     sid : string;
 begin
   sid := GetEnumName(TypeInfo(SiteCodeType),Ord(FGeteBayDetails.Connector.SiteID));
-  FSyncObj.WriteLog(Format('Start saving Shipping Location Details for site %s',[sid]));
+  hlog.Add(Format('{hms}: Start saving Shipping Location Details for site %s',[sid]));
   with FQuery1 do
   try
     SQL.Clear;
@@ -462,9 +467,9 @@ begin
       ParamByName('DetailVersion').Value := FGeteBayDetails.ShippingLocationDetails[i].DetailVersion;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving Shipping Location Details for site %s. Saved %d',[sid,FGeteBayDetails.ShippingLocationDetails.Count]));
+    hlog.Add(Format('{hms}: End saving Shipping Location Details for site %s. Saved %d',[sid,FGeteBayDetails.ShippingLocationDetails.Count]));
   except
-    on E : Exception do WriteExceptionLog(E);
+    on E : Exception do hlog.AddException(E);
   end;
 end;
 
@@ -473,7 +478,7 @@ var i,j:Integer;
     sid : string;
 begin
   sid := GetEnumName(TypeInfo(SiteCodeType),Ord(FGeteBayDetails.Connector.SiteID));
-  FSyncObj.WriteLog(Format('Start saving Shipping Services Details for site %s',[sid]));
+  hlog.Add(Format('{hms}: Start saving Shipping Services Details for site %s',[sid]));
   with FQuery1 do
   try
     SQL.Clear;
@@ -525,9 +530,9 @@ begin
       ParamByName('SiteID').Value := sid;
       ExecSQL;
     end;
-    FSyncObj.WriteLog(Format('End saving Shipping Services Details for site %s. Saved %d',[sid,FGeteBayDetails.ShippingServiceDetails.Count]));
+    hlog.Add(Format('{hms}: End saving Shipping Services Details for site %s. Saved %d',[sid,FGeteBayDetails.ShippingServiceDetails.Count]));
   except
-    on E : Exception do WriteExceptionLog(E);
+    on E : Exception do hlog.AddException(E);
   end;
 end;
 
@@ -553,35 +558,19 @@ begin
     SaveReturnPolicyDetails;
   except
     on E : Exception do begin
-      WriteExceptionLog(E);
-      FSyncObj.WriteLog(Format('Operation %s',[Operation]));
+      hlog.AddException(E);
+      hlog.Add(Format('{hms}: Operation %s',[Operation]));
     end;
   end;
 end;
 
 procedure TGetDetailsThread.WriteEbayApiExceptionLog(E : Exception);
-var i : Integer;
 begin
-  with FSyncObj do begin
-    WriteLog(Format('%s: ThreadID %d Exception',[DateTimeToStr(now),Self.ThreadID]));
-    WriteLog(Format('Exception class name: %s',[E.ClassName]));
-    WriteLog(Format('Exception message: %s',[E.Message]));
-    WriteLog('Request XML');
-    for i := 0 to FEbayTradingConnect.RequestXMLText.Count -1 do WriteLog(FEbayTradingConnect.RequestXMLText.Strings[i]);
-    WriteLog('Response XML');
-    for i := 0 to FEbayTradingConnect.ResponseXMLText.Count -1 do WriteLog(FEbayTradingConnect.ResponseXMLText.Strings[i]);
-    SaveLog;
-  end;
-end;
-
-procedure TGetDetailsThread.WriteExceptionLog(E: Exception);
-begin
-  with FSyncObj do begin
-    WriteLog(Format('%s: ThreadID %d Exception',[DateTimeToStr(now),Self.ThreadID]));
-    WriteLog(Format('Exception class name: %s',[E.ClassName]));
-    WriteLog(Format('Exception message: %s',[E.Message]));
-    SaveLog;
-  end;
+  hlog.AddException(E);
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Request.xml');
+  hlog.Add('Request XML saved');
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Response.xml');
+  hlog.Add('Response XML saved');
 end;
 
 procedure TGetDetailsThread.EbayTradingConnectWork(ASender: TObject; AWorkMode: TWorkMode; AWorkCount: Int64);
@@ -604,12 +593,8 @@ procedure TFTSync.DoSynchronize;
 begin
   inherited;
   case Operation of
-    OpWriteLogMes : begin
-      fmMain.WriteLog(Value);
-    end;
     OpIncApiUsage : fmMain.IncApiUsage;
     OpOnSave : fmMain.dxRibbonStatusBar1.Panels[4].Text := Value;
-    OpSaveLog : fmLog.AdvLogMemo.Lines.SaveToFile(fmMain.BasePath+'\log\exception.log');
     OpOnWork : begin
       case WorkMode of
         wmRead : begin
@@ -643,19 +628,6 @@ procedure TFTSync.OnSave(Saved, Total: Integer);
 begin
   Operation := OpOnSave;
   Value := Format('Saved %d of %d items',[Saved,Total]);
-  Synchronize;
-end;
-
-procedure TFTSync.SaveLog;
-begin
-  Operation := OpSaveLog;
-  Synchronize;
-end;
-
-procedure TFTSync.WriteLog(Logmessage: string);
-begin
-  Value := Logmessage;
-  Operation := OpWriteLogMes ;
   Synchronize;
 end;
 

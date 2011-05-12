@@ -8,6 +8,7 @@ uses
   Variants,
   XMLDoc,
   EbayConnect,
+  CommonTypes,
   IdThread,
   IdComponent,
   IdSync,
@@ -36,10 +37,8 @@ uses
     iVal : Integer;
     WorkMode: TWorkMode;
     procedure DoSynchronize; override;
-    procedure WriteLog(Logmessage: string);
     procedure IncApiUsage;
     procedure OnSave(Saved,Total : Integer);
-    procedure SaveLog;
     procedure OnHttpWork(AWorkMode: TWorkMode; const AWorkCount: Integer);
   end;
 
@@ -60,8 +59,7 @@ uses
      // Protected declarations
      procedure SaveCategory(Category:TCatRec);
      procedure GetAllCategories;
-     procedure WriteEbayApiExceptionLog(E : Exception);
-     procedure WriteExceptionLog(E : Exception);
+     procedure GetCategoriesAPIError(Sender: TObject; ErrorRecord: eBayAPIError);
      procedure EbayTradingConnectWork(ASender: TObject; AWorkMode: TWorkMode; AWorkCount: Int64);
   public
      // Public declarations
@@ -70,6 +68,13 @@ uses
      FCertID        : ShortString;
      FToken         : WideString;
      FSiteID        : SiteCodeType;
+
+     FHost           : ShortString; // 'api.ebay.com';
+     FServiceURL     : ShortString; // 'https://api.ebay.com/ws/api.dll';
+     FSSLCertFile    : ShortString; // 'test_b_crt.pem';
+     FSSLKeyFile     : ShortString; // 'test_b_key.pem';
+     FSSLRootCertFile: ShortString; // 'test_b_ca.pem';
+     FSSLPassword    : ShortString; // 'aaaa';
 
      FCategoryVersion : Integer;
 
@@ -94,7 +99,7 @@ uses
 
 implementation
 
-uses XMLIntf, uMain, functions, uLog, ActiveX;
+uses XMLIntf, uMain, functions, hotlog, ActiveX;
 
 { TGetCategoriesThread }
 
@@ -103,7 +108,7 @@ begin
   inherited Create(true);
   FForm := Form;
   FreeOnTerminate := True;
-  FSyncObj := TFTSync.Create(Self);
+  FSyncObj := TFTSync.Create;
 end;
 
 destructor TGetCategoriesThread.Destroy;
@@ -119,12 +124,12 @@ begin
     hr := CoInitializeEx(nil, COINIT_APARTMENTTHREADED);
     FEbayTradingConnect := TEbayTradingConnect.Create(nil);
     with FEbayTradingConnect do begin
-      Host := 'api.ebay.com';
-      ServiceURL := 'https://api.ebay.com/ws/api.dll';
-      SSLCertFile := 'test_b_crt.pem';
-      SSLKeyFile := 'test_b_key.pem';
-      SSLRootCertFile := 'test_b_ca.pem';
-      SSLPassword := 'aaaa';
+      Host := FHost;
+      ServiceURL := FServiceURL;
+      SSLCertFile := FSSLCertFile;
+      SSLKeyFile := FSSLKeyFile;
+      SSLRootCertFile := FSSLRootCertFile;
+      SSLPassword := FSSLPassword;
       SiteID := FSiteID;
       AppID := FAppID;
       DevID := FDevID;
@@ -185,14 +190,14 @@ begin
     TMPStringList.SaveToStream(Request);
     Request.Seek(0,soFromBeginning);
     try
-      FSyncObj.WriteLog(Format('%s: Request Start',[DateTimeToStr(now)]));
+      hLog.Add('{hms}: Request Start');
       FRxDelta := 0;
       FTxDelta := 0;
       FEbayTradingConnect.ExecuteRequest(Request,Response);
-      FSyncObj.WriteLog(Format('%s: Response received',[DateTimeToStr(now)]));
+      hLog.Add('{hms}: Response received');
       FSyncObj.IncApiUsage;
     except
-      on E : Exception do WriteEbayApiExceptionLog(E);
+      on E : Exception do hlog.AddException(E);
     end;
     Response.Seek(0,soFromBeginning);
     CXMLDoc.XML.LoadFromStream(Response);
@@ -203,7 +208,7 @@ begin
     try
       FCategoryVersion := CXMLDoc.DocumentElement.ChildNodes.Nodes['CategoryVersion'].NodeValue;
       CatCount := CXMLDoc.DocumentElement.ChildNodes.Nodes['CategoryArray'].ChildNodes.Count;
-      FSyncObj.WriteLog(Format('%s: Categories downloaded - %s : %d ',[DateTimeToStr(now),OpResult,CatCount]));
+      hLog.Add(Format('{hms}: Categories downloaded - %s : %d ',[OpResult,CatCount]));
       if CatCount >0 then begin
         FSavedCategoriesCnt := 0;
         FSyncObj.OnSave(FSavedCategoriesCnt,CatCount);
@@ -222,13 +227,13 @@ begin
           else FCategory.LeafCategory := null;
           SaveCategory(FCategory);
         end;
-        FSyncObj.WriteLog(Format('%s: Categories Saved - %d',[DateTimeToStr(now),FSavedCategoriesCnt]));
+        hLog.Add(Format('{hms}: Categories Saved - %d',[FSavedCategoriesCnt]));
         FSyncObj.OnSave(FSavedCategoriesCnt,CatCount);
       end;
     except
-      on E : Exception do  WriteExceptionLog(E);
+      on E : Exception do hlog.AddException(E);
     end
-    else FSyncObj.WriteLog(Format('%s: Categories downloaded - %s',[DateTimeToStr(now),OpResult]));
+    else hLog.Add(Format('{hms}: Categories downloaded - %s',[OpResult]));
     FSyncObj.IncApiUsage;
     CXMLDoc.Active := false;
   finally
@@ -257,39 +262,28 @@ begin
     end;
   except
     on E : Exception do with Category do begin
-      WriteExceptionLog(E);
-      FSyncObj.WriteLog(Format('CategoryID %s',[CategoryID]));
-      FSyncObj.WriteLog(Format('CategoryLevel %d',[CategoryLevel]));
-      FSyncObj.WriteLog(Format('CategoryName %s',[CategoryName]));
-      FSyncObj.WriteLog(Format('CategoryParentID %s',[CategoryParentID]));
-      FSyncObj.WriteLog(Format('SiteCode %s',[GetEnumName(TypeInfo(SiteCodeType),ord(FSiteID))]));
+      hlog.Add('{hms}: Saving category exception');
+      hlog.AddException(E);
+      hlog.Add(Format('CategoryID %s',[CategoryID]));
+      hlog.Add(Format('CategoryLevel %d',[CategoryLevel]));
+      hlog.Add(Format('CategoryName %s',[CategoryName]));
+      hlog.Add(Format('CategoryParentID %s',[CategoryParentID]));
+      hlog.Add(Format('SiteCode %s',[GetEnumName(TypeInfo(SiteCodeType),ord(FSiteID))]));
     end;
   end;
 end;
 
-procedure TGetCategoriesThread.WriteEbayApiExceptionLog(E : Exception);
-var i : Integer;
+procedure TGetCategoriesThread.GetCategoriesAPIError(Sender: TObject; ErrorRecord: eBayAPIError);
 begin
-  with FSyncObj do begin
-    WriteLog(Format('%s: ThreadID %d Exception',[DateTimeToStr(now),Self.ThreadID]));
-    WriteLog(Format('Exception class name: %s',[E.ClassName]));
-    WriteLog(Format('Exception message: %s',[E.Message]));
-    WriteLog('Request XML');
-    for i := 0 to FEbayTradingConnect.RequestXMLText.Count -1 do WriteLog(FEbayTradingConnect.RequestXMLText.Strings[i]);
-    WriteLog('Response XML');
-    for i := 0 to FEbayTradingConnect.ResponseXMLText.Count -1 do WriteLog(FEbayTradingConnect.ResponseXMLText.Strings[i]);
-    SaveLog;
+  with ErrorRecord  do begin
+    hlog.add('{hms}: - ApiCall: GetEbayDetails. API Error');
+    hlog.add(Format('Short Message %s , Error Code %s , Severity Code %s ,Error Classification %s',[ShortMessage, ErrorCode, SeverityCode, ErrorClassification]));
+    hlog.add(Format('Message %s ',[LongMessage]));
   end;
-end;
-
-procedure TGetCategoriesThread.WriteExceptionLog(E: Exception);
-begin
-  with FSyncObj do begin
-    WriteLog(Format('%s: ThreadID %d Exception',[DateTimeToStr(now),Self.ThreadID]));
-    WriteLog(Format('Exception class name: %s',[E.ClassName]));
-    WriteLog(Format('Exception message: %s',[E.Message]));
-    SaveLog;
-  end;
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Request.xml');
+  hlog.Add('Request XML saved');
+  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Response.xml');
+  hlog.Add('Response XML saved');
 end;
 
 procedure TGetCategoriesThread.EbayTradingConnectWork(ASender: TObject; AWorkMode: TWorkMode; AWorkCount: Int64);
@@ -312,12 +306,8 @@ procedure TFTSync.DoSynchronize;
 begin
   inherited;
   case Operation of
-    OpWriteLogMes : begin
-      fmMain.WriteLog(Value);
-    end;
     OpIncApiUsage : fmMain.IncApiUsage;
     OpOnSave : fmMain.dxRibbonStatusBar1.Panels[4].Text := Value;
-    OpSaveLog : fmLog.AdvLogMemo.Lines.SaveToFile(fmMain.BasePath+'\log\exception.log');
     OpOnWork : begin
       case WorkMode of
         wmRead : begin
@@ -351,19 +341,6 @@ procedure TFTSync.OnSave(Saved, Total: Integer);
 begin
   Operation := OpOnSave;
   Value := Format('Saved %d of %d items',[Saved,Total]);
-  Synchronize;
-end;
-
-procedure TFTSync.SaveLog;
-begin
-  Operation := OpSaveLog;
-  Synchronize;
-end;
-
-procedure TFTSync.WriteLog(Logmessage: string);
-begin
-  Value := Logmessage;
-  Operation := OpWriteLogMes ;
   Synchronize;
 end;
 

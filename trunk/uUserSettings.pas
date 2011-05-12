@@ -4,7 +4,7 @@ interface
 {$I definitions.inc}
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, DB, GridsEh, DBGridEh, ExtCtrls;
+  Dialogs, StdCtrls, DB, GridsEh, DBGridEh, ExtCtrls, DBGridEhGrouping;
 
 type
   TfmUserSettings = class(TForm)
@@ -43,7 +43,7 @@ var
 
 implementation
 
-uses uMain, uIniSettings, TypInfo, EbayConnect;
+uses uMain, uIniSettings, TypInfo, EbayConnect, CommonTypes;
 
 {$R *.dfm}
 

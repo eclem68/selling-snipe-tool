@@ -10,11 +10,12 @@ uses
   dxdbtree, Buttons, cxMaskEdit, cxDropDownEdit, cxCheckComboBox,
   cxDBCheckComboBox, dxmdaset, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
   cxCurrencyEdit, cxCalc, ExtCtrls, cxLabel, cxDBLabel, cxSpinEdit, cxGroupBox,
-  cxRadioGroup, WPRTEDefs, WPCTRMemo, WPCTRRich, Wpdbrich, WPRuler, WPTbar,
-  JvExStdCtrls, JvListBox, JvDriveCtrls, ieview, iemview,
-  AdvToolBar, ExtDlgs, TntExtDlgs, ImgList, ToolWin, JvExComCtrls, JvToolBar,
+  cxRadioGroup, JvExStdCtrls, JvListBox, JvDriveCtrls, ieview, iemview,
+  AdvToolBar, ExtDlgs, ImgList, ToolWin, JvExComCtrls, JvToolBar,
   GridsEh, DBGridEh, HotSpotImage, cxCheckGroup, cxDBCheckGroup, cxMemo,
-  dxSkinsdxStatusBarPainter, dxStatusBar, imageenview;
+  dxSkinsdxStatusBarPainter, dxStatusBar, imageenview, WPRuler, WPCTRRich,
+  WPTbar, WPRTEDefs, WPCTRMemo, Wpdbrich, JvBaseDlg, JvImageDlg, JvExControls,
+  JvSpeedButton;
 
 type
   TfmItemEditor = class(TForm)
@@ -79,12 +80,7 @@ type
     dbwprchtxt1: TDBWPRichText;
     wptlbr1: TWPToolBar;
     wprlr1: TWPRuler;
-    lbl24: TLabel;
-    lbl25: TLabel;
-    cxtxtdt1: TcxTextEdit;
     tmr1: TTimer;
-    cxtxtdt2: TcxTextEdit;
-    dlg1: TTntOpenPictureDialog;
     pnl2: TPanel;
     img1: TImageEnMView;
     jvtlbr1: TJvToolBar;
@@ -155,7 +151,6 @@ type
     cxgrpbx1: TcxGroupBox;
     cxgrpbx2: TcxGroupBox;
     pnl3: TPanel;
-    cxm2: TcxMemo;
     cxdbm3: TcxDBMemo;
     pnl4: TPanel;
     lbl35: TLabel;
@@ -167,7 +162,6 @@ type
     cbb13: TcxDBLookupComboBox;
     cbb10: TcxDBLookupComboBox;
     pnl5: TPanel;
-    cxm1: TcxMemo;
     cxdbm1: TcxDBMemo;
     dxstsbr1: TdxStatusBar;
     ImageList1: TImageList;
@@ -198,8 +192,55 @@ type
     TrackBar8: TTrackBar;
     pnl7: TPanel;
     ImageEnView1: TImageEnView;
+    JvImageDialog1: TJvImageDialog;
+    nxtblItems: TnxTable;
+    nxtblItemsid: TUnsignedAutoIncField;
+    nxtblItemsSiteID: TStringField;
+    nxtblItemsTitle: TStringField;
+    nxtblItemsSubTitle: TStringField;
+    nxtblItemsPrimaryCategory: TLargeintField;
+    nxtblItemsSecondaryCategory: TLargeintField;
+    nxtblItemsCurrency: TStringField;
+    nxtblItemsPrice: TExtendedField;
+    nxtblItemsReservePrice: TExtendedField;
+    nxtblItemsBuyItNowPrice: TExtendedField;
+    nxtblItemsListingType: TStringField;
+    nxtblItemsQuantity: TIntegerField;
+    nxtblItemsLotSize: TIntegerField;
+    nxtblItemsAuctionDuration: TStringField;
+    nxtblItemsPrivateListing: TBooleanField;
+    nxtblItemsShippingService1: TIntegerField;
+    nxtblItemsSS1Price: TExtendedField;
+    nxtblItemsShippingService2: TIntegerField;
+    nxtblItemsSS2Price: TExtendedField;
+    nxtblItemsShippingService3: TIntegerField;
+    nxtblItemsSS3Price: TExtendedField;
+    nxtblItemsSS1Insurance: TExtendedField;
+    nxtblItemsSS2Insurance: TExtendedField;
+    nxtblItemsSS3Insurance: TExtendedField;
+    nxtblItemsInShippingService1: TIntegerField;
+    nxtblItemsISS1Price: TExtendedField;
+    nxtblItemsInShippingService2: TIntegerField;
+    nxtblItemsISS2Price: TExtendedField;
+    nxtblItemsInShippingService3: TIntegerField;
+    nxtblItemsISS3Price: TExtendedField;
+    nxtblItemsISS1Insurance: TExtendedField;
+    nxtblItemsISS2Insurance: TExtendedField;
+    nxtblItemsISS3Insurance: TExtendedField;
+    nxtblItemsInsuranceOptions: TStringField;
+    nxtblItemsDescription: TnxMemoField;
+    nxtblItemsPaymentMethods: TStringField;
+    nxtblItemsShipToLocations: TStringField;
+    nxtblItemsPaymentPolicy: TnxMemoField;
+    nxtblItemsRP_Description: TnxMemoField;
+    nxtblItemsPR_Refund: TStringField;
+    nxtblItemsRP_ReturnsWithin: TStringField;
+    nxtblItemsRP_ReturnsAccepted: TStringField;
+    nxtblItemsRP_ShippingCostPaidBy: TStringField;
+    dsItems: TDataSource;
+    JvSpeedButton1: TJvSpeedButton;
+    JvSpeedButton2: TJvSpeedButton;
     procedure ChangeChannelsOffset;
-    procedure Translator(source: string; langapir: string ; Control: TControl);
     procedure FormShow(Sender: TObject);
     procedure OnGetCategoriesSuggestTerminate(Sender: TObject);
     procedure btn2Click(Sender: TObject);
@@ -213,7 +254,6 @@ type
     procedure cbb8PropertiesChange(Sender: TObject);
     procedure cbb9PropertiesChange(Sender: TObject);
     procedure cxpgcntrl2Change(Sender: TObject);
-    procedure tmr1Timer(Sender: TObject);
     procedure cxdbtxtdt1PropertiesChange(Sender: TObject);
     procedure img1ImageSelect(Sender: TObject; idx: Integer);
     procedure TrackBar1Change(Sender: TObject);
@@ -227,6 +267,8 @@ type
     procedure CheckBox3Click(Sender: TObject);
     procedure TrackBar5Change(Sender: TObject);
     procedure CheckBox4Click(Sender: TObject);
+    procedure JvSpeedButton1Click(Sender: TObject);
+    procedure JvSpeedButton2Click(Sender: TObject);
   private
     { Private declarations }
     imgfoldername : string;
@@ -239,13 +281,13 @@ var
 
 implementation
 
-uses uMain, uGetSuggestedCategories, EbayConnect, TypInfo, googleTranslator, hyieutils;
+uses uMain, uGetSuggestedCategories, EbayConnect, TypInfo, hyieutils, CommonTypes, hotLog;
 
 {$R *.dfm}
 
 procedure TfmItemEditor.btn2Click(Sender: TObject);
 begin
-  fmMain.nxtblItems.Post;
+  nxtblItems.Post;
 end;
 
 procedure TfmItemEditor.TrackBar1Change(Sender: TObject);
@@ -346,25 +388,10 @@ begin
   end;
 end;
 
-procedure TfmItemEditor.Translator(source: string; langapir: string ; Control: TControl);
-var tthread : TTranslateThread;
-begin
-  try
-    tthread := TTranslateThread.Create(fmItemEditor);
-    tthread.Source := source;
-    tthread.LangPair := langapir;
-    tthread.ControlTag := Control.Tag;
-    tthread.StatusBarPanel := dxstsbr1.Panels[0];
-    tthread.Run;
-  finally
-    tthread.Free;
-  end;
-end;
-
 procedure TfmItemEditor.btn5Click(Sender: TObject);
 begin
-  if dlg1.Execute(fmItemEditor.Handle) then begin
-    if CopyFile(PChar(dlg1.FileName),PChar(imgfoldername+'\'+ExtractFileName(dlg1.FileName)),true) then
+  if JvImageDialog1.Execute then begin
+    if CopyFile(PChar(JvImageDialog1.Title),PChar(imgfoldername+'\'+ExtractFileName(JvImageDialog1.Title)),true) then
     begin
       ShowMessage('File succesfully added!');
       img1.Clear;
@@ -378,7 +405,7 @@ end;
 procedure TfmItemEditor.cbb4PropertiesChange(Sender: TObject);
 var tmp : Boolean;
 begin
-  with fmMain.nxtblItems do begin
+  with nxtblItems do begin
     tmp := not FieldByName('ShippingService1').IsNull;
     cxdbclcdt4.Enabled := tmp;
     cxdbclcdt7.Enabled := tmp;
@@ -388,7 +415,7 @@ end;
 procedure TfmItemEditor.cbb5PropertiesChange(Sender: TObject);
 var tmp : Boolean;
 begin
-  with fmMain.nxtblItems do begin
+  with nxtblItems do begin
     tmp := not FieldByName('ShippingService2').IsNull;
     cxdbclcdt5.Enabled := tmp;
     cxdbclcdt6.Enabled := tmp;
@@ -398,7 +425,7 @@ end;
 procedure TfmItemEditor.cbb6PropertiesChange(Sender: TObject);
 var tmp : Boolean;
 begin
-  with fmMain.nxtblItems do begin
+  with nxtblItems do begin
     tmp := not FieldByName('ShippingService3').IsNull;
     cxdbclcdt8.Enabled := tmp;
     cxdbclcdt9.Enabled := tmp;
@@ -408,7 +435,7 @@ end;
 procedure TfmItemEditor.cbb7PropertiesChange(Sender: TObject);
 var tmp : Boolean;
 begin
-  with fmMain.nxtblItems do begin
+  with nxtblItems do begin
     tmp := not FieldByName('InShippingService1').IsNull;
     cxdbclcdt10.Enabled := tmp;
     cxdbclcdt11.Enabled := tmp;
@@ -418,7 +445,7 @@ end;
 procedure TfmItemEditor.cbb8PropertiesChange(Sender: TObject);
 var tmp : Boolean;
 begin
-  with fmMain.nxtblItems do begin
+  with nxtblItems do begin
     tmp := not FieldByName('InShippingService2').IsNull;
     cxdbclcdt12.Enabled := tmp;
     cxdbclcdt13.Enabled := tmp;
@@ -428,7 +455,7 @@ end;
 procedure TfmItemEditor.cbb9PropertiesChange(Sender: TObject);
 var tmp : Boolean;
 begin
-  with fmMain.nxtblItems do begin
+  with nxtblItems do begin
     tmp := not FieldByName('InShippingService3').IsNull;
     cxdbclcdt14.Enabled := tmp;
     cxdbclcdt15.Enabled := tmp;
@@ -456,14 +483,22 @@ begin
     end;
     with thread do begin
       OnTerminate:=OnGetCategoriesSuggestTerminate;
-      with fmMain.inisettings.ebay do begin
-        FDevID         := DevID;
-        FAppID         := AppID;
-        FCertID        := CertID;
-        FToken         := Token;
-        FSiteID        := SiteCodeType(GetEnumValue(TypeInfo(SiteCodeType),fmMain.nxtblSites.FieldByName('SiteCode').AsString));
-        FBasePath      := fmMain.BasePath;
-        FQuery         := cxdbtxtdt1.Text;
+      with fmMain.inisettings.ebay  do begin
+        FDevID            := DevID;
+        FAppID            := AppID;
+        FCertID           := CertID;
+        FToken            := Token;
+        FSiteID           := SiteCodeType(GetEnumValue(TypeInfo(SiteCodeType),fmMain.nxtblSites.FieldByName('SiteCode').AsString));
+        FBasePath         := fmMain.BasePath;
+        FQuery            := cxdbtxtdt1.Text;
+        FHost             := Host;
+        FServiceURL       := ServiceURL;
+      end;
+      with fmMain.inisettings.SSLSettings do begin
+        FSSLCertFile      := SSLCertFile;
+        FSSLKeyFile       := SSLKeyFile;
+        FSSLRootCertFile  := SSLRootCertFile;
+        FSSLPassword      := SSLPassword;
       end;
       Start;
     end;
@@ -480,6 +515,7 @@ end;
 procedure TfmItemEditor.FormShow(Sender: TObject);
 var tmp : Boolean;
 begin
+  if not nxtblItems.Active then nxtblItems.Open;
   if not nxqryCategories.Active then nxqryCategories.Open;
   if not dxmdt1.Active then dxmdt1.Open;
   if not nxqryCurrency.Active then nxqryCurrency.Open;
@@ -494,7 +530,7 @@ begin
   if not nxqry3.Active then nxqry3.Open;
   if not nxqry4.Active then nxqry4.Open;
 
-  with fmMain.nxtblItems do begin
+  with nxtblItems do begin
     tmp := not FieldByName('ShippingService1').IsNull;
     cxdbclcdt4.Enabled := tmp;
     cxdbclcdt7.Enabled := tmp;
@@ -530,7 +566,7 @@ begin
     end;
     nxqryShipToLocations.Next;
   end;
-  imgfoldername := fmMain.BasePath+ '\images\'+fmMain.nxtblItems.FieldByName('id').AsString;
+  imgfoldername := fmMain.BasePath+ '\images\'+nxtblItems.FieldByName('id').AsString;
   if not DirectoryExists(imgfoldername) then CreateDir(imgfoldername);
   img1.Clear;
   img1.FillFromDirectory(imgfoldername+'\');
@@ -572,9 +608,21 @@ begin
   end;
 end;
 
+procedure TfmItemEditor.JvSpeedButton1Click(Sender: TObject);
+begin
+  if not (nxTblItems.State in [dsEdit,dsInsert]) then nxTblItems.Edit;
+  nxTblItems.FieldByName('PrimaryCategory').Value := null;
+end;
+
+procedure TfmItemEditor.JvSpeedButton2Click(Sender: TObject);
+begin
+  if not (nxTblItems.State in [dsEdit,dsInsert]) then nxTblItems.Edit;
+  nxTblItems.FieldByName('SecondaryCategory').Value := null;
+end;
+
 procedure TfmItemEditor.nxqryCategoriesBeforeOpen(DataSet: TDataSet);
 begin
-  nxqryCategories.ParamByName('SiteID').AsString := fmMain.nxtblItems.FieldByName('SiteID').AsString;
+  nxqryCategories.ParamByName('SiteID').AsString := nxtblItems.FieldByName('SiteID').AsString;
 end;
 
 procedure TfmItemEditor.OnGetCategoriesSuggestTerminate(Sender: TObject);
@@ -583,7 +631,7 @@ var tmpstr : string;
 begin
   tmpstr := 'Categories Suggest loaded.';
   with fmMain do begin
-    WriteLog(tmpstr);
+    hlog.Add(tmpstr);
     SetOperation(opIdle);
     dxRibbonStatusBar1.Panels[4].Text := '';
   end;
@@ -593,24 +641,6 @@ begin
     dxmdt1.FieldByName('CategoryName').AsString := (Sender as TGetSuggestedCategoriesThread).SuggestedCategoryArray.SuggestedCategory[i].Category.CategoryName;
     dxmdt1.FieldByName('PercentItemFound').AsInteger := (Sender as TGetSuggestedCategoriesThread).SuggestedCategoryArray.SuggestedCategory[i].PercentItemFound;
   end;
-end;
-
-procedure TfmItemEditor.tmr1Timer(Sender: TObject);
-begin
-  dxstsbr1.Panels[0].Text := 'Translate ....';
-  // Title
-  if cxdbtxtdt1.Focused  then Translator(cxdbtxtdt1.Text,'en|ja',cxtxtdt1);
-  if cxtxtdt1.Focused  then Translator(cxtxtdt1.Text,'ja|en',cxdbtxtdt1);
-  // SubTitle
-  if cxdbtxtdt2.Focused  then Translator(cxdbtxtdt2.Text,'en|ja',cxtxtdt2);
-  if cxtxtdt2.Focused  then Translator(cxtxtdt2.Text,'ja|en',cxdbtxtdt2);
-  // payment instructions
-  if cxm1.Focused then Translator(cxm1.Text,'ja|en',cxdbm1);
-  if cxdbm1.Focused then Translator(cxdbm1.Text,'en|ja',cxm1);
-  // Return policy
-  if cxm2.Focused then Translator(cxm2.Text,'ja|en',cxdbm3);
-  if cxdbm3.Focused then Translator(cxdbm3.Text,'en|ja',cxm2);
-  tmr1.Enabled := False;
 end;
 
 end.

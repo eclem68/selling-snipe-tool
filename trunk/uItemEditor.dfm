@@ -25,29 +25,30 @@ object fmItemEditor: TfmItemEditor
     ActivePage = cxtbsht1
     Align = alClient
     TabOrder = 0
-    ClientRectBottom = 576
-    ClientRectRight = 1055
-    ClientRectTop = 24
+    ClientRectBottom = 573
+    ClientRectLeft = 3
+    ClientRectRight = 1052
+    ClientRectTop = 23
     object cxtbsht1: TcxTabSheet
       Caption = 'General info'
       ImageIndex = 0
       object lbl1: TLabel
         Left = 32
         Top = 6
-        Width = 36
+        Width = 20
         Height = 13
-        Caption = 'Title EN'
+        Caption = 'Title'
       end
       object lbl2: TLabel
         Left = 16
-        Top = 62
-        Width = 52
+        Top = 33
+        Width = 36
         Height = 13
-        Caption = 'Subtitle EN'
+        Caption = 'Subtitle'
       end
       object lbl3: TLabel
         Left = 16
-        Top = 125
+        Top = 61
         Width = 52
         Height = 13
         Caption = 'Categories'
@@ -94,46 +95,110 @@ object fmItemEditor: TfmItemEditor
         Height = 13
         Caption = 'Lot size'
       end
-      object lbl24: TLabel
-        Left = 18
-        Top = 90
-        Width = 50
-        Height = 13
-        Caption = 'Subtitle JP'
+      object JvSpeedButton1: TJvSpeedButton
+        Left = 500
+        Top = 113
+        Width = 25
+        Height = 25
+        Glyph.Data = {
+          36030000424D3603000000000000360000002800000010000000100000000100
+          18000000000000030000120B0000120B00000000000000000000FF00FFFF00FF
+          FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FF96909696909696909696909696909696
+          9096969096969096969096969096969096969096FF00FFFF00FFFF00FFFF00FF
+          969096FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FF969096FF00FFFF00FFFF00FF0C02A581808BFFFFFFEFEFEFC8C8D20C02A5EC
+          ECECEBEBEBEAEAEAE9E9E9E8E8E8FFFFFF969096FF00FFFF00FF0C02A53053E0
+          0C02A5D3D3D4C7C7C80C02A5123AE00C02A5EDEDEDECECECEBEBEBEAEAEAFFFF
+          FF969096FF00FFFF00FFDC12E50C02A52D5AFF0C02A50C02A52150FF0C02A5CA
+          C9D3EFEFEFEEEEEEEDEDEDECECECFFFFFF969096FF00FFFF00FFFF00FFD300D4
+          0C02A52850F4254FF40C02A5C8C8C9F1F1F1F1F1F1F0F0F0EFEFEFEEEEEEFFFF
+          FF969096FF00FFFF00FFFF00FFD300D40C02A5305EFA2C57F70C02A5C9C9CBF3
+          F3F3F2F2F2F1F1F1F1F1F1F0F0F0FFFFFF969096FF00FFFF00FFDC11E50C02A5
+          407DFF0C02A50C02A5376CFF0C02A5CDCCD7F4F4F4F3F3F3F2F2F2F1F1F1FFFF
+          FF969096FF00FFFF00FF0C02A57C93E50C02A5D3D3D4CECED00C02A54F6CE10C
+          02A5F6F6F6F5F5F5F4F4F4F3F3F3F5F5F5969096FF00FFFF00FFFF00FF0C02A5
+          80808BFFFFFFFBFBFBD0D0DB0C02A5F9F9F9F8F8F89690969690969690969690
+          96969096FF00FFFF00FFFF00FFFF00FF969096FFFFFFFDFDFDFCFCFCFBFBFBFA
+          FAFAFAFAFA969096E1E1E1E1E1E1B7B1B7969096FF00FFFF00FFFF00FFFF00FF
+          969096FFFFFFFFFFFFFEFEFEFDFDFDFCFCFCFBFBFB969096E1E1E1B7B1B79690
+          96FF00FFFF00FFFF00FFFF00FFFF00FF969096FFFFFFFFFFFFFFFFFFFEFEFEFE
+          FEFEFDFDFD969096B7B1B7969096FF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+          969096969096969096969096969096969096969096969096969096FF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+          00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
+        HotTrackFont.Charset = DEFAULT_CHARSET
+        HotTrackFont.Color = clWindowText
+        HotTrackFont.Height = -11
+        HotTrackFont.Name = 'Tahoma'
+        HotTrackFont.Style = []
+        OnClick = JvSpeedButton1Click
       end
-      object lbl25: TLabel
-        Left = 34
-        Top = 34
-        Width = 34
-        Height = 13
-        Caption = 'Title JP'
+      object JvSpeedButton2: TJvSpeedButton
+        Left = 500
+        Top = 140
+        Width = 25
+        Height = 25
+        Glyph.Data = {
+          36030000424D3603000000000000360000002800000010000000100000000100
+          18000000000000030000120B0000120B00000000000000000000FF00FFFF00FF
+          FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FF96909696909696909696909696909696
+          9096969096969096969096969096969096969096FF00FFFF00FFFF00FFFF00FF
+          969096FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FF969096FF00FFFF00FFFF00FF0C02A581808BFFFFFFEFEFEFC8C8D20C02A5EC
+          ECECEBEBEBEAEAEAE9E9E9E8E8E8FFFFFF969096FF00FFFF00FF0C02A53053E0
+          0C02A5D3D3D4C7C7C80C02A5123AE00C02A5EDEDEDECECECEBEBEBEAEAEAFFFF
+          FF969096FF00FFFF00FFDC12E50C02A52D5AFF0C02A50C02A52150FF0C02A5CA
+          C9D3EFEFEFEEEEEEEDEDEDECECECFFFFFF969096FF00FFFF00FFFF00FFD300D4
+          0C02A52850F4254FF40C02A5C8C8C9F1F1F1F1F1F1F0F0F0EFEFEFEEEEEEFFFF
+          FF969096FF00FFFF00FFFF00FFD300D40C02A5305EFA2C57F70C02A5C9C9CBF3
+          F3F3F2F2F2F1F1F1F1F1F1F0F0F0FFFFFF969096FF00FFFF00FFDC11E50C02A5
+          407DFF0C02A50C02A5376CFF0C02A5CDCCD7F4F4F4F3F3F3F2F2F2F1F1F1FFFF
+          FF969096FF00FFFF00FF0C02A57C93E50C02A5D3D3D4CECED00C02A54F6CE10C
+          02A5F6F6F6F5F5F5F4F4F4F3F3F3F5F5F5969096FF00FFFF00FFFF00FF0C02A5
+          80808BFFFFFFFBFBFBD0D0DB0C02A5F9F9F9F8F8F89690969690969690969690
+          96969096FF00FFFF00FFFF00FFFF00FF969096FFFFFFFDFDFDFCFCFCFBFBFBFA
+          FAFAFAFAFA969096E1E1E1E1E1E1B7B1B7969096FF00FFFF00FFFF00FFFF00FF
+          969096FFFFFFFFFFFFFEFEFEFDFDFDFCFCFCFBFBFB969096E1E1E1B7B1B79690
+          96FF00FFFF00FFFF00FFFF00FFFF00FF969096FFFFFFFFFFFFFFFFFFFEFEFEFE
+          FEFEFDFDFD969096B7B1B7969096FF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+          969096969096969096969096969096969096969096969096969096FF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+          00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
+        HotTrackFont.Charset = DEFAULT_CHARSET
+        HotTrackFont.Color = clWindowText
+        HotTrackFont.Height = -11
+        HotTrackFont.Name = 'Tahoma'
+        HotTrackFont.Style = []
+        OnClick = JvSpeedButton2Click
       end
       object cxdbtxtdt1: TcxDBTextEdit
         Tag = 2
-        Left = 74
+        Left = 58
         Top = 3
         DataBinding.DataField = 'Title'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
         Properties.OnChange = cxdbtxtdt1PropertiesChange
         TabOrder = 0
-        Width = 429
+        Width = 468
       end
       object cxdbtxtdt2: TcxDBTextEdit
         Tag = 4
-        Left = 74
-        Top = 59
+        Left = 58
+        Top = 34
         DataBinding.DataField = 'SubTitle'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
         Properties.OnChange = cxdbtxtdt1PropertiesChange
         TabOrder = 1
-        Width = 429
+        Width = 468
       end
       object cxpgcntrl2: TcxPageControl
         Left = 13
-        Top = 144
-        Width = 513
+        Top = 80
+        Width = 481
         Height = 89
         ActivePage = cxtbsht4
         ImageBorder = 1
@@ -142,13 +207,14 @@ object fmItemEditor: TfmItemEditor
         TabSlants.Kind = skCutCorner
         TabSlants.Positions = []
         OnChange = cxpgcntrl2Change
-        ClientRectBottom = 87
-        ClientRectLeft = 2
-        ClientRectRight = 511
-        ClientRectTop = 22
+        ClientRectBottom = 86
+        ClientRectLeft = 3
+        ClientRectRight = 478
+        ClientRectTop = 23
         object cxtbsht4: TcxTabSheet
           Caption = 'Tree selection'
           ImageIndex = 0
+          ExplicitWidth = 487
           object lbl4: TLabel
             Left = 18
             Top = 16
@@ -166,7 +232,7 @@ object fmItemEditor: TfmItemEditor
           object dxdblkptrvwSecondaryCategory: TdxDBLookupTreeView
             Left = 108
             Top = 35
-            Width = 373
+            Width = 370
             Height = 21
             CanSelectParents = False
             ParentColor = False
@@ -192,17 +258,17 @@ object fmItemEditor: TfmItemEditor
             ListSource = ds1
             KeyField = 'CategoryID'
             ListField = 'CategoryName'
-            Options = [trCanDBNavigate, trSmartRecordLoad, trSmartRecordCopy, trCheckHasChildren]
+            Options = [trSmartRecordLoad, trSmartRecordCopy, trCheckHasChildren]
             ParentField = 'CategoryParentID'
             RootValue = -1
             TextStyle = tvtsShort
-            DataField = 'PrimaryCategory'
-            DataSource = fmMain.ds1
+            DataField = 'SecondaryCategory'
+            DataSource = dsItems
           end
           object dxdblkptrvwPrimaryCategory: TdxDBLookupTreeView
             Left = 108
             Top = 8
-            Width = 373
+            Width = 370
             Height = 21
             CanSelectParents = False
             ParentColor = False
@@ -233,12 +299,13 @@ object fmItemEditor: TfmItemEditor
             RootValue = -1
             TextStyle = tvtsShort
             DataField = 'PrimaryCategory'
-            DataSource = fmMain.ds1
+            DataSource = dsItems
           end
         end
         object cxtbsht5: TcxTabSheet
           Caption = 'Keyword suggested'
           ImageIndex = 1
+          ExplicitWidth = 507
           object lbl6: TLabel
             Left = 18
             Top = 16
@@ -257,6 +324,7 @@ object fmItemEditor: TfmItemEditor
             Left = 108
             Top = 12
             DataBinding.DataField = 'PrimaryCategory'
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.KeyFieldNames = 'CategoryID'
             Properties.ListColumns = <
@@ -282,6 +350,7 @@ object fmItemEditor: TfmItemEditor
             Left = 108
             Top = 39
             DataBinding.DataField = 'SecondaryCategory'
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.KeyFieldNames = 'CategoryID'
             Properties.ListColumns = <
@@ -309,7 +378,7 @@ object fmItemEditor: TfmItemEditor
         Left = 121
         Top = 239
         DataBinding.DataField = 'Currency'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
         Properties.ImmediatePost = True
         Properties.KeyFieldNames = 'Code'
@@ -326,7 +395,7 @@ object fmItemEditor: TfmItemEditor
         Left = 121
         Top = 266
         DataBinding.DataField = 'Price'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
         TabOrder = 4
         Width = 121
@@ -335,7 +404,7 @@ object fmItemEditor: TfmItemEditor
         Left = 121
         Top = 295
         DataBinding.DataField = 'ReservePrice'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
         TabOrder = 5
         Width = 121
@@ -344,7 +413,7 @@ object fmItemEditor: TfmItemEditor
         Left = 121
         Top = 323
         DataBinding.DataField = 'BuyItNowPrice'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
         TabOrder = 6
         Width = 121
@@ -353,7 +422,7 @@ object fmItemEditor: TfmItemEditor
         Left = 248
         Top = 268
         DataBinding.DataField = 'Currency'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Height = 21
         Width = 65
       end
@@ -361,7 +430,7 @@ object fmItemEditor: TfmItemEditor
         Left = 248
         Top = 296
         DataBinding.DataField = 'Currency'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Height = 21
         Width = 65
       end
@@ -369,7 +438,7 @@ object fmItemEditor: TfmItemEditor
         Left = 248
         Top = 324
         DataBinding.DataField = 'Currency'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Height = 21
         Width = 65
       end
@@ -378,7 +447,7 @@ object fmItemEditor: TfmItemEditor
         Top = 289
         Caption = 'Listing type'
         DataBinding.DataField = 'ListingType'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
         Properties.Items = <
           item
@@ -397,7 +466,7 @@ object fmItemEditor: TfmItemEditor
         Left = 440
         Top = 239
         DataBinding.DataField = 'Quantity'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
         TabOrder = 11
         Width = 54
@@ -407,16 +476,16 @@ object fmItemEditor: TfmItemEditor
         Top = 127
         Width = 513
         Height = 218
-        ActivePage = cxtbsht6
+        ActivePage = cxtbsht7
         ImageBorder = 1
         LookAndFeel.Kind = lfStandard
         TabOrder = 12
         TabSlants.Kind = skCutCorner
         TabSlants.Positions = []
-        ClientRectBottom = 216
-        ClientRectLeft = 2
-        ClientRectRight = 511
-        ClientRectTop = 22
+        ClientRectBottom = 215
+        ClientRectLeft = 3
+        ClientRectRight = 510
+        ClientRectTop = 23
         object cxtbsht6: TcxTabSheet
           Caption = 'Domestic shipping'
           ImageIndex = 0
@@ -487,7 +556,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 54
             DataBinding.DataField = 'SS1Price'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 0
             Width = 96
@@ -496,7 +565,7 @@ object fmItemEditor: TfmItemEditor
             Left = 346
             Top = 54
             DataBinding.DataField = 'SS1Insurance'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 1
             Width = 96
@@ -505,7 +574,7 @@ object fmItemEditor: TfmItemEditor
             Left = 207
             Top = 54
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -513,7 +582,7 @@ object fmItemEditor: TfmItemEditor
             Left = 448
             Top = 57
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -521,7 +590,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 112
             DataBinding.DataField = 'SS2Price'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 4
             Width = 96
@@ -530,7 +599,7 @@ object fmItemEditor: TfmItemEditor
             Left = 346
             Top = 112
             DataBinding.DataField = 'SS2Insurance'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 5
             Width = 96
@@ -539,7 +608,7 @@ object fmItemEditor: TfmItemEditor
             Left = 207
             Top = 112
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -547,7 +616,7 @@ object fmItemEditor: TfmItemEditor
             Left = 448
             Top = 112
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -555,7 +624,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 169
             DataBinding.DataField = 'SS3Price'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 8
             Width = 96
@@ -564,7 +633,7 @@ object fmItemEditor: TfmItemEditor
             Left = 346
             Top = 169
             DataBinding.DataField = 'SS3Insurance'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 9
             Width = 96
@@ -573,7 +642,7 @@ object fmItemEditor: TfmItemEditor
             Left = 207
             Top = 169
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -581,7 +650,7 @@ object fmItemEditor: TfmItemEditor
             Left = 448
             Top = 169
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -589,7 +658,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 26
             DataBinding.DataField = 'ShippingService1'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.ImmediatePost = True
             Properties.KeyFieldNames = 'ShippingServiceID'
@@ -606,7 +675,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 81
             DataBinding.DataField = 'ShippingService2'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.ImmediatePost = True
             Properties.KeyFieldNames = 'ShippingServiceID'
@@ -623,7 +692,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 139
             DataBinding.DataField = 'ShippingService3'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.ImmediatePost = True
             Properties.KeyFieldNames = 'ShippingServiceID'
@@ -707,7 +776,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 54
             DataBinding.DataField = 'ISS1Price'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 0
             Width = 96
@@ -716,7 +785,7 @@ object fmItemEditor: TfmItemEditor
             Left = 346
             Top = 54
             DataBinding.DataField = 'ISS1Insurance'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 1
             Width = 96
@@ -725,7 +794,7 @@ object fmItemEditor: TfmItemEditor
             Left = 207
             Top = 53
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -733,7 +802,7 @@ object fmItemEditor: TfmItemEditor
             Left = 448
             Top = 57
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -741,7 +810,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 112
             DataBinding.DataField = 'ISS2Price'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 4
             Width = 96
@@ -750,7 +819,7 @@ object fmItemEditor: TfmItemEditor
             Left = 346
             Top = 112
             DataBinding.DataField = 'ISS2Insurance'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 5
             Width = 96
@@ -759,7 +828,7 @@ object fmItemEditor: TfmItemEditor
             Left = 207
             Top = 112
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -767,7 +836,7 @@ object fmItemEditor: TfmItemEditor
             Left = 448
             Top = 112
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -775,7 +844,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 169
             DataBinding.DataField = 'ISS3Price'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 8
             Width = 96
@@ -784,7 +853,7 @@ object fmItemEditor: TfmItemEditor
             Left = 346
             Top = 169
             DataBinding.DataField = 'ISS3Insurance'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             TabOrder = 9
             Width = 96
@@ -793,7 +862,7 @@ object fmItemEditor: TfmItemEditor
             Left = 207
             Top = 169
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -801,7 +870,7 @@ object fmItemEditor: TfmItemEditor
             Left = 448
             Top = 169
             DataBinding.DataField = 'Currency'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Height = 21
             Width = 51
           end
@@ -809,7 +878,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 26
             DataBinding.DataField = 'InShippingService1'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.ImmediatePost = True
             Properties.KeyFieldNames = 'ShippingServiceID'
@@ -826,7 +895,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 81
             DataBinding.DataField = 'InShippingService2'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.ImmediatePost = True
             Properties.KeyFieldNames = 'ShippingServiceID'
@@ -843,7 +912,7 @@ object fmItemEditor: TfmItemEditor
             Left = 105
             Top = 139
             DataBinding.DataField = 'InShippingService3'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.ImmediatePost = True
             Properties.KeyFieldNames = 'ShippingServiceID'
@@ -862,42 +931,10 @@ object fmItemEditor: TfmItemEditor
         Left = 440
         Top = 267
         DataBinding.DataField = 'LotSize'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
         TabOrder = 13
         Width = 54
-      end
-      object cxtxtdt1: TcxTextEdit
-        Tag = 1
-        Left = 74
-        Top = 30
-        ParentFont = False
-        Properties.ClearKey = 46
-        Properties.OnChange = cxdbtxtdt1PropertiesChange
-        Style.Font.Charset = CHINESEBIG5_CHARSET
-        Style.Font.Color = clWindowText
-        Style.Font.Height = -11
-        Style.Font.Name = 'Tahoma'
-        Style.Font.Style = []
-        Style.IsFontAssigned = True
-        TabOrder = 14
-        Width = 429
-      end
-      object cxtxtdt2: TcxTextEdit
-        Tag = 3
-        Left = 74
-        Top = 86
-        ParentFont = False
-        Properties.ClearKey = 46
-        Properties.OnChange = cxdbtxtdt1PropertiesChange
-        Style.Font.Charset = CHINESEBIG5_CHARSET
-        Style.Font.Color = clWindowText
-        Style.Font.Height = -11
-        Style.Font.Name = 'Tahoma'
-        Style.Font.Style = []
-        Style.IsFontAssigned = True
-        TabOrder = 15
-        Width = 429
       end
       object cxdbchckgrp1: TcxDBCheckGroup
         Left = 13
@@ -905,9 +942,9 @@ object fmItemEditor: TfmItemEditor
         Caption = 'Payment methods'
         Properties.EditValueFormat = cvfCaptions
         Properties.Items = <>
-        TabOrder = 16
+        TabOrder = 14
         DataBinding.DataField = 'PaymentMethods'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Height = 197
         Width = 276
       end
@@ -918,9 +955,9 @@ object fmItemEditor: TfmItemEditor
         Properties.Columns = 3
         Properties.EditValueFormat = cvfCaptions
         Properties.Items = <>
-        TabOrder = 17
+        TabOrder = 15
         DataBinding.DataField = 'ShipToLocations'
-        DataBinding.DataSource = fmMain.ds1
+        DataBinding.DataSource = dsItems
         Height = 115
         Width = 509
       end
@@ -928,7 +965,7 @@ object fmItemEditor: TfmItemEditor
         Left = 296
         Top = 360
         Caption = 'Payment Policy'
-        TabOrder = 18
+        TabOrder = 16
         Height = 189
         Width = 281
         object pnl5: TPanel
@@ -938,34 +975,16 @@ object fmItemEditor: TfmItemEditor
           Height = 169
           Align = alClient
           TabOrder = 0
-          object cxm1: TcxMemo
-            Tag = 5
-            Left = 1
-            Top = 80
-            Align = alBottom
-            ParentFont = False
-            Properties.OnChange = cxdbtxtdt1PropertiesChange
-            Style.Font.Charset = CHINESEBIG5_CHARSET
-            Style.Font.Color = clWindowText
-            Style.Font.Height = -11
-            Style.Font.Name = 'Tahoma'
-            Style.Font.Style = []
-            Style.IsFontAssigned = True
-            TabOrder = 0
-            Height = 88
-            Width = 275
-          end
           object cxdbm1: TcxDBMemo
             Tag = 6
-            Left = 1
+            Left = 8
             Top = 1
-            Align = alTop
             DataBinding.DataField = 'PaymentPolicy'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.OnChange = cxdbtxtdt1PropertiesChange
-            TabOrder = 1
-            Height = 74
-            Width = 275
+            TabOrder = 0
+            Height = 160
+            Width = 257
           end
         end
       end
@@ -973,7 +992,7 @@ object fmItemEditor: TfmItemEditor
         Left = 583
         Top = 360
         Caption = 'Return Policy'
-        TabOrder = 19
+        TabOrder = 17
         Height = 188
         Width = 460
         object pnl3: TPanel
@@ -983,34 +1002,16 @@ object fmItemEditor: TfmItemEditor
           Height = 168
           Align = alClient
           TabOrder = 0
-          object cxm2: TcxMemo
-            Tag = 7
-            Left = 1
-            Top = 80
-            Align = alBottom
-            ParentFont = False
-            Properties.OnChange = cxdbtxtdt1PropertiesChange
-            Style.Font.Charset = CHINESEBIG5_CHARSET
-            Style.Font.Color = clWindowText
-            Style.Font.Height = -11
-            Style.Font.Name = 'Tahoma'
-            Style.Font.Style = []
-            Style.IsFontAssigned = True
-            TabOrder = 0
-            Height = 87
-            Width = 245
-          end
           object cxdbm3: TcxDBMemo
             Tag = 8
-            Left = 1
+            Left = 8
             Top = 1
-            Align = alTop
             DataBinding.DataField = 'RP_Description'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.OnChange = cxdbtxtdt1PropertiesChange
-            TabOrder = 1
-            Height = 74
-            Width = 245
+            TabOrder = 0
+            Height = 160
+            Width = 233
           end
         end
         object pnl4: TPanel
@@ -1052,7 +1053,7 @@ object fmItemEditor: TfmItemEditor
             Left = 7
             Top = 15
             DataBinding.DataField = 'PR_Refund'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.KeyFieldNames = 'Value'
             Properties.ListColumns = <
@@ -1067,7 +1068,7 @@ object fmItemEditor: TfmItemEditor
             Left = 7
             Top = 55
             DataBinding.DataField = 'RP_ReturnsWithin'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.KeyFieldNames = 'Value'
             Properties.ListColumns = <
@@ -1082,7 +1083,7 @@ object fmItemEditor: TfmItemEditor
             Left = 7
             Top = 96
             DataBinding.DataField = 'RP_ReturnsAccepted'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.KeyFieldNames = 'Value'
             Properties.ListColumns = <
@@ -1097,7 +1098,7 @@ object fmItemEditor: TfmItemEditor
             Left = 7
             Top = 136
             DataBinding.DataField = 'RP_ShippingCostPaidBy'
-            DataBinding.DataSource = fmMain.ds1
+            DataBinding.DataSource = dsItems
             Properties.ClearKey = 46
             Properties.KeyFieldNames = 'Value'
             Properties.ListColumns = <
@@ -1117,8 +1118,8 @@ object fmItemEditor: TfmItemEditor
       object dbwprchtxt1: TDBWPRichText
         Left = 0
         Top = 55
-        Width = 1055
-        Height = 497
+        Width = 1049
+        Height = 495
         AutoDisplay = True
         DataField = 'Description'
         NoUpdateOnExit = False
@@ -1276,7 +1277,7 @@ object fmItemEditor: TfmItemEditor
       object wptlbr1: TWPToolBar
         Left = 0
         Top = 0
-        Width = 1055
+        Width = 1049
         Height = 29
         UseDockManager = False
         KeepGroupsTogether = True
@@ -1301,7 +1302,7 @@ object fmItemEditor: TfmItemEditor
       object wprlr1: TWPRuler
         Left = 0
         Top = 29
-        Width = 1055
+        Width = 1049
         Height = 26
         Units = wrCentimeter
         DrawOptions = []
@@ -1319,7 +1320,7 @@ object fmItemEditor: TfmItemEditor
         Left = 0
         Top = 0
         Width = 310
-        Height = 552
+        Height = 550
         Align = alLeft
         BevelInner = bvLowered
         TabOrder = 0
@@ -1327,11 +1328,11 @@ object fmItemEditor: TfmItemEditor
           Left = 2
           Top = 33
           Width = 306
-          Height = 517
+          Height = 515
           ParentCtl3D = False
           OnImageSelect = img1ImageSelect
           ThumbnailsBorderColor = clBlack
-          ImageEnVersion = '3.1.1'
+          ImageEnVersion = '3.1.2'
           Align = alClient
           TabOrder = 0
         end
@@ -1363,16 +1364,16 @@ object fmItemEditor: TfmItemEditor
       object pnl6: TPanel
         Left = 310
         Top = 0
-        Width = 745
-        Height = 552
+        Width = 739
+        Height = 550
         Align = alClient
         BevelInner = bvLowered
         TabOrder = 1
         object Panel1: TPanel
-          Left = 494
+          Left = 488
           Top = 2
           Width = 249
-          Height = 487
+          Height = 485
           Align = alRight
           TabOrder = 0
           object GroupBox2: TGroupBox
@@ -1593,8 +1594,8 @@ object fmItemEditor: TfmItemEditor
         end
         object pnl7: TPanel
           Left = 2
-          Top = 489
-          Width = 741
+          Top = 487
+          Width = 735
           Height = 61
           Align = alBottom
           BevelKind = bkSoft
@@ -1603,11 +1604,11 @@ object fmItemEditor: TfmItemEditor
         object ImageEnView1: TImageEnView
           Left = 2
           Top = 2
-          Width = 492
-          Height = 487
+          Width = 486
+          Height = 485
           ParentCtl3D = False
           LegacyBitmap = False
-          ImageEnVersion = '3.1.1'
+          ImageEnVersion = '3.1.2'
           EnableInteractionHints = True
           Align = alClient
           TabOrder = 2
@@ -1665,7 +1666,7 @@ object fmItemEditor: TfmItemEditor
         PanelStyle.ScrollLockKeyAppearance.InactiveCaption = 'SCRL'
         PanelStyle.InsertKeyAppearance.ActiveCaption = 'OVR'
         PanelStyle.InsertKeyAppearance.InactiveCaption = 'INS'
-        Width = 124
+        Width = 127
       end
       item
         PanelStyleClassName = 'TdxStatusBarStateIndicatorPanelStyle'
@@ -1723,7 +1724,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqryCurrency: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       'select * from CurrencyDetails where SiteID=:SiteID')
     Left = 288
@@ -1743,13 +1744,8 @@ object fmItemEditor: TfmItemEditor
   object tmr1: TTimer
     Enabled = False
     Interval = 3000
-    OnTimer = tmr1Timer
     Left = 520
     Top = 80
-  end
-  object dlg1: TTntOpenPictureDialog
-    Left = 256
-    Top = 480
   end
   object il1: TImageList
     Left = 224
@@ -1900,7 +1896,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqryEbayPref: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       'SELECT ep.PaymentOptions ,  ep.ShippingLocations , '
       
@@ -1934,7 +1930,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqryShippingService: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       
         'SELECT * FROM "ShippingServiceDetails"   where  InternationalSer' +
@@ -1960,7 +1956,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqryShippingServiceIn: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       
         'SELECT * FROM "ShippingServiceDetails"   where  InternationalSer' +
@@ -1976,7 +1972,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqryPaymentMethods: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       'SELECT * FROM "PaymentOptionDetails" where  SiteID=:SiteId')
     Left = 40
@@ -1995,7 +1991,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqryShipToLocations: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       'SELECT * FROM "ShippingLocationDetails" where  SiteID=:SiteId')
     Left = 696
@@ -2014,7 +2010,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqry1: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       
         'SELECT * FROM "ReturnPolicyDetails" where Type='#39'Refund'#39' and Site' +
@@ -2035,7 +2031,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqry3: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       
         'SELECT * FROM "ReturnPolicyDetails" where Type='#39'ReturnsAccepted'#39 +
@@ -2061,7 +2057,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqry4: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       
         'SELECT * FROM "ReturnPolicyDetails" where Type='#39'ShippingCostPaid' +
@@ -2082,7 +2078,7 @@ object fmItemEditor: TfmItemEditor
   end
   object nxqry2: TnxQuery
     Database = fmMain.nxdtbs1
-    DataSource = fmMain.ds1
+    DataSource = fmMain.dsItems
     SQL.Strings = (
       
         'SELECT * FROM "ReturnPolicyDetails" where Type='#39'ReturnsWithin'#39' a' +
@@ -2237,5 +2233,180 @@ object fmItemEditor: TfmItemEditor
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000000000000000}
+  end
+  object JvImageDialog1: TJvImageDialog
+    Title = 'Image Viewer'
+    Left = 80
+    Top = 296
+  end
+  object nxtblItems: TnxTable
+    Database = fmMain.nxdtbs1
+    TableName = 'Items'
+    IndexFieldNames = 'id'
+    MasterFields = 'id'
+    MasterSource = fmMain.dsItems
+    Left = 864
+    Top = 64
+    object nxtblItemsid: TUnsignedAutoIncField
+      FieldName = 'id'
+    end
+    object nxtblItemsSiteID: TStringField
+      FieldName = 'SiteID'
+      Size = 50
+    end
+    object nxtblItemsTitle: TStringField
+      FieldName = 'Title'
+      Size = 55
+    end
+    object nxtblItemsSubTitle: TStringField
+      FieldName = 'SubTitle'
+      Size = 55
+    end
+    object nxtblItemsPrimaryCategory: TLargeintField
+      FieldName = 'PrimaryCategory'
+    end
+    object nxtblItemsSecondaryCategory: TLargeintField
+      FieldName = 'SecondaryCategory'
+    end
+    object nxtblItemsCurrency: TStringField
+      FieldName = 'Currency'
+      Size = 3
+    end
+    object nxtblItemsPrice: TExtendedField
+      FieldName = 'Price'
+      Precision = 19
+    end
+    object nxtblItemsReservePrice: TExtendedField
+      FieldName = 'ReservePrice'
+      Precision = 19
+    end
+    object nxtblItemsBuyItNowPrice: TExtendedField
+      FieldName = 'BuyItNowPrice'
+      Precision = 19
+    end
+    object nxtblItemsListingType: TStringField
+      FieldName = 'ListingType'
+      Size = 30
+    end
+    object nxtblItemsQuantity: TIntegerField
+      FieldName = 'Quantity'
+    end
+    object nxtblItemsLotSize: TIntegerField
+      FieldName = 'LotSize'
+    end
+    object nxtblItemsAuctionDuration: TStringField
+      FieldName = 'AuctionDuration'
+    end
+    object nxtblItemsPrivateListing: TBooleanField
+      FieldName = 'PrivateListing'
+    end
+    object nxtblItemsShippingService1: TIntegerField
+      FieldName = 'ShippingService1'
+    end
+    object nxtblItemsSS1Price: TExtendedField
+      FieldName = 'SS1Price'
+      Precision = 19
+    end
+    object nxtblItemsShippingService2: TIntegerField
+      FieldName = 'ShippingService2'
+    end
+    object nxtblItemsSS2Price: TExtendedField
+      FieldName = 'SS2Price'
+      Precision = 19
+    end
+    object nxtblItemsShippingService3: TIntegerField
+      FieldName = 'ShippingService3'
+    end
+    object nxtblItemsSS3Price: TExtendedField
+      FieldName = 'SS3Price'
+      Precision = 19
+    end
+    object nxtblItemsSS1Insurance: TExtendedField
+      FieldName = 'SS1Insurance'
+      Precision = 19
+    end
+    object nxtblItemsSS2Insurance: TExtendedField
+      FieldName = 'SS2Insurance'
+      Precision = 19
+    end
+    object nxtblItemsSS3Insurance: TExtendedField
+      FieldName = 'SS3Insurance'
+      Precision = 19
+    end
+    object nxtblItemsInShippingService1: TIntegerField
+      FieldName = 'InShippingService1'
+    end
+    object nxtblItemsISS1Price: TExtendedField
+      FieldName = 'ISS1Price'
+      Precision = 19
+    end
+    object nxtblItemsInShippingService2: TIntegerField
+      FieldName = 'InShippingService2'
+    end
+    object nxtblItemsISS2Price: TExtendedField
+      FieldName = 'ISS2Price'
+      Precision = 19
+    end
+    object nxtblItemsInShippingService3: TIntegerField
+      FieldName = 'InShippingService3'
+    end
+    object nxtblItemsISS3Price: TExtendedField
+      FieldName = 'ISS3Price'
+      Precision = 19
+    end
+    object nxtblItemsISS1Insurance: TExtendedField
+      FieldName = 'ISS1Insurance'
+      Precision = 19
+    end
+    object nxtblItemsISS2Insurance: TExtendedField
+      FieldName = 'ISS2Insurance'
+      Precision = 19
+    end
+    object nxtblItemsISS3Insurance: TExtendedField
+      FieldName = 'ISS3Insurance'
+      Precision = 19
+    end
+    object nxtblItemsInsuranceOptions: TStringField
+      FieldName = 'InsuranceOptions'
+      Size = 40
+    end
+    object nxtblItemsDescription: TnxMemoField
+      FieldName = 'Description'
+      BlobType = ftMemo
+    end
+    object nxtblItemsPaymentMethods: TStringField
+      FieldName = 'PaymentMethods'
+      Size = 200
+    end
+    object nxtblItemsShipToLocations: TStringField
+      FieldName = 'ShipToLocations'
+      Size = 200
+    end
+    object nxtblItemsPaymentPolicy: TnxMemoField
+      FieldName = 'PaymentPolicy'
+      BlobType = ftMemo
+    end
+    object nxtblItemsRP_Description: TnxMemoField
+      FieldName = 'RP_Description'
+      BlobType = ftMemo
+    end
+    object nxtblItemsPR_Refund: TStringField
+      FieldName = 'PR_Refund'
+    end
+    object nxtblItemsRP_ReturnsWithin: TStringField
+      FieldName = 'RP_ReturnsWithin'
+    end
+    object nxtblItemsRP_ReturnsAccepted: TStringField
+      FieldName = 'RP_ReturnsAccepted'
+      Size = 50
+    end
+    object nxtblItemsRP_ShippingCostPaidBy: TStringField
+      FieldName = 'RP_ShippingCostPaidBy'
+    end
+  end
+  object dsItems: TDataSource
+    DataSet = nxtblItems
+    Left = 928
+    Top = 64
   end
 end

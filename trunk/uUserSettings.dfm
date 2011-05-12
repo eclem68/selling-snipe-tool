@@ -135,6 +135,7 @@ object fmUserSettings: TfmUserSettings
     Width = 429
     Height = 337
     AutoFitColWidths = True
+    DataGrouping.GroupLevels = <>
     DataSource = ds1
     Flat = False
     FooterColor = clWindow

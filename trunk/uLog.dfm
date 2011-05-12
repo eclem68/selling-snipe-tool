@@ -11,6 +11,8 @@ object fmLog: TfmLog
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
+  OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
@@ -41,22 +43,22 @@ object fmLog: TfmLog
       OnClick = Button2Click
     end
   end
-  object AdvLogMemo: TSynMemo
+  object LogMemo: TMemo
     Left = 0
     Top = 0
     Width = 831
     Height = 512
     Align = alClient
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -13
-    Font.Name = 'Courier New'
-    Font.Style = []
     TabOrder = 1
-    Gutter.Font.Charset = DEFAULT_CHARSET
-    Gutter.Font.Color = clWindowText
-    Gutter.Font.Height = -11
-    Gutter.Font.Name = 'Courier New'
-    Gutter.Font.Style = []
+    ExplicitLeft = 384
+    ExplicitTop = 128
+    ExplicitWidth = 185
+    ExplicitHeight = 89
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = '.log'
+    Title = 'Save log'
+    Left = 552
+    Top = 368
   end
 end

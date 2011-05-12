@@ -7,11 +7,22 @@ uses IniFiles;
 
 type
 
+  TEnviroment = (sandbox, production);
+
   REbay = record
     AppID: string;
     DevID: string;
     CertID: string;
     Token: string;
+    Host : string;
+    ServiceURL : string;
+  end;
+
+  SSLSet = record
+    SSLCertFile : string;
+    SSLKeyFile : string;
+    SSLRootCertFile : string;
+    SSLPassword : string;
   end;
 
   RSeparator = record
@@ -27,7 +38,10 @@ type
     function GetLocaleInformation(Flag: Integer): String;
   public
     ebay: REbay;
+    SSLSettings : SSLSet;
+    enviroment : TEnviroment;
     separator: RSeparator;
+    PBasePath : string;
     procedure Load(f: string);
     procedure Save(f: string);
 {$IFDEF DEMO}
@@ -40,7 +54,7 @@ implementation
 
 { Tinisettings }
 
-uses SysUtils, Windows, Classes
+uses SysUtils, Windows, Classes , TypInfo
 {$IFDEF DEMO}
   , DCPcrypt2, DCPrijndael, DCPbase64, functions,
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP, Dialogs,
@@ -113,10 +127,10 @@ var
   Response: TMemoryStream;
   ResponseData: TStringList;
   Cipher: TDCP_rijndael;
-  Data, Key, IV: string;
+  Data, Key, IV: AnsiString;
   tmp: TArray;
   IdHTTP: TIdHTTP;
-  KeyText: string;
+  KeyText: AnsiString;
   CurrentTime: Integer;
 begin
   try
@@ -150,7 +164,7 @@ begin
       Key := PadWithZeros(KeyText, KeySize);
       IV := PadWithZeros(IVText, BlockSize);
       // Decode the Base64 encoded string
-      Data := Base64DecodeStr(ResponseData.Text);
+      Data := Base64DecodeStr(AnsiString(ResponseData.Text));
       // Create the cipher and initialise according to the key length
       Cipher := TDCP_rijndael.Create(nil);
       if Length(KeyText) <= 16 then
@@ -168,11 +182,11 @@ begin
       // Display the result
       tmp := explode(';', Data, 0);
       if High(tmp) = 3 then
-      begin
-        ebay.AppID := tmp[0];
-        ebay.DevID := tmp[1];
-        ebay.CertID := tmp[2];
-        ebay.Token := tmp[3];
+      with ebay do begin
+        AppID := tmp[0];
+        DevID := tmp[1];
+        CertID := tmp[2];
+        Token := tmp[3];
       end
       else
         Exception.Create('Invalid keys data');
@@ -201,23 +215,36 @@ begin
 end;
 
 procedure Tinisettings.Load(f: string);
+var env_str : string;
 begin
   if FileExists(f) then
     try
       FIniFile := TIniFile.Create(f);
+      env_str := FIniFile.ReadString('ebay', 'enviroment', 'production');
+      enviroment := TEnviroment(GetEnumValue(TypeInfo(TEnviroment),env_str));
 {$IFDEF DEMO}
       GetKeys;
 {$ELSE}
-      ebay.AppID := FIniFile.ReadString('ebay', 'AppID', '');
-      ebay.DevID := FIniFile.ReadString('ebay', 'DevID', '');
-      ebay.CertID := FIniFile.ReadString('ebay', 'CertID', '');
-      ebay.Token := FIniFile.ReadString('ebay', 'Token', '');
+      with FIniFile, ebay do begin
+        AppID := ReadString(env_str, 'AppID', '');
+        DevID := ReadString(env_str, 'DevID', '');
+        CertID := ReadString(env_str, 'CertID', '');
+        Token := ReadString(env_str, 'Token', '');
+      end;
 {$ENDIF}
       FtmpString := FIniFile.ReadString('separator', 'DecimalSeparator',
         GetLocaleInformation(LOCALE_SDECIMAL));
       separator.DecimalSeparator := FtmpString[1];
       FtmpString := FIniFile.ReadString('separator', 'CSVSeparator', ';');
       separator.CSVSeparator := FtmpString[1];
+      with FIniFile, ebay, SSLSettings do begin
+        Host := FIniFile.ReadString(env_str, 'Host', 'api.ebay.com');
+        ServiceURL := ReadString(env_str, 'ServiceURL', 'https://api.ebay.com/ws/api.dll');
+        SSLCertFile := ReadString('ssl', 'SSLCertFile', 'test_b_crt.pem');
+        SSLKeyFile := ReadString('ssl', 'SSLKeyFile', 'test_b_key.pem');
+        SSLRootCertFile := ReadString('ssl', 'SSLRootCertFile', 'test_b_ca.pem');
+        SSLPassword := ReadString('ssl', 'SSLPassword', 'aaaa');
+      end;
     finally
       FIniFile.Free;
     end

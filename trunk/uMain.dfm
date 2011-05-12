@@ -2,8 +2,8 @@ object fmMain: TfmMain
   Left = 0
   Top = 0
   Caption = 'Ebay tools'
-  ClientHeight = 599
-  ClientWidth = 818
+  ClientHeight = 752
+  ClientWidth = 1110
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,7 +19,7 @@ object fmMain: TfmMain
   object dxRibbon1: TdxRibbon
     Left = 0
     Top = 0
-    Width = 818
+    Width = 1110
     Height = 147
     BarManager = dxbrmngr1
     ColorSchemeName = 'Blue'
@@ -28,7 +28,8 @@ object fmMain: TfmMain
     TabOrder = 1
     TabStop = False
     object dxrbntbRibbon1Tab2: TdxRibbonTab
-      Caption = 'Seller'
+      Active = True
+      Caption = 'My items'
       Groups = <
         item
           ToolbarName = 'dxbrmngr1Bar5'
@@ -37,12 +38,6 @@ object fmMain: TfmMain
           ToolbarName = 'dxbrmngr1Bar6'
         end>
       Index = 0
-    end
-    object dxrbntbRibbon1Tab3: TdxRibbonTab
-      Active = True
-      Caption = 'Buyer'
-      Groups = <>
-      Index = 1
     end
     object dxrbntbRibbon1Tab4: TdxRibbonTab
       Caption = 'Settings'
@@ -53,7 +48,7 @@ object fmMain: TfmMain
         item
           ToolbarName = 'dxbrmngr1Bar3'
         end>
-      Index = 2
+      Index = 1
     end
     object dxRibbon1Tab1: TdxRibbonTab
       Caption = 'Appearance'
@@ -64,18 +59,18 @@ object fmMain: TfmMain
         item
           ToolbarName = 'dxbrmngr1Bar7'
         end>
-      Index = 3
+      Index = 2
     end
     object dxRibbon1Tab2: TdxRibbonTab
       Caption = 'Help'
       Groups = <>
-      Index = 4
+      Index = 3
     end
   end
   object dxRibbonStatusBar1: TdxRibbonStatusBar
     Left = 0
-    Top = 576
-    Width = 818
+    Top = 729
+    Width = 1110
     Height = 23
     Panels = <
       item
@@ -107,8 +102,8 @@ object fmMain: TfmMain
   object cxgrd1: TcxGrid
     Left = 0
     Top = 147
-    Width = 818
-    Height = 429
+    Width = 1110
+    Height = 582
     Align = alClient
     TabOrder = 6
     object cxgrdbtblvwGrid1DBTableView1: TcxGridDBTableView
@@ -4127,71 +4122,12 @@ object fmMain: TfmMain
     Left = 672
     Top = 376
   end
-  object AdvSmoothSplashScreen1: TAdvSmoothSplashScreen
-    Version = '1.0.3.0'
-    AutoShow = False
-    AutoAdaptPictureSize = False
-    BasicProgramInfo.ProgramName.Text = 'Loading categories ...'
-    BasicProgramInfo.ProgramName.Font.Charset = DEFAULT_CHARSET
-    BasicProgramInfo.ProgramName.Font.Color = clWindowText
-    BasicProgramInfo.ProgramName.Font.Height = -19
-    BasicProgramInfo.ProgramName.Font.Name = 'Tahoma'
-    BasicProgramInfo.ProgramName.Font.Style = [fsBold]
-    BasicProgramInfo.ProgramVersion.Font.Charset = DEFAULT_CHARSET
-    BasicProgramInfo.ProgramVersion.Font.Color = clWindowText
-    BasicProgramInfo.ProgramVersion.Font.Height = -19
-    BasicProgramInfo.ProgramVersion.Font.Name = 'Tahoma'
-    BasicProgramInfo.ProgramVersion.Font.Style = []
-    BasicProgramInfo.ProgramVersion.PosX = 80
-    BasicProgramInfo.CopyRightFont.Charset = DEFAULT_CHARSET
-    BasicProgramInfo.CopyRightFont.Color = clWindowText
-    BasicProgramInfo.CopyRightFont.Height = -11
-    BasicProgramInfo.CopyRightFont.Name = 'Tahoma'
-    BasicProgramInfo.CopyRightFont.Style = []
-    Fill.ColorMirror = 16737843
-    Fill.ColorMirrorTo = 6723891
-    Fill.BorderColor = clBlue
-    Fill.BorderWidth = 2
-    Fill.Rounding = 13
-    Fill.ShadowOffset = 0
-    Fill.Glow = gmGradient
-    ProgressBar.BackGroundFill.ColorMirror = clNone
-    ProgressBar.BackGroundFill.ColorMirrorTo = clNone
-    ProgressBar.BackGroundFill.Rounding = 0
-    ProgressBar.BackGroundFill.ShadowOffset = 0
-    ProgressBar.ProgressFill.ColorMirror = clNone
-    ProgressBar.ProgressFill.ColorMirrorTo = clNone
-    ProgressBar.ProgressFill.Rounding = 0
-    ProgressBar.ProgressFill.ShadowOffset = 0
-    ProgressBar.Font.Charset = DEFAULT_CHARSET
-    ProgressBar.Font.Color = clWindowText
-    ProgressBar.Font.Height = -11
-    ProgressBar.Font.Name = 'Tahoma'
-    ProgressBar.Font.Style = []
-    ProgressBar.ProgressFont.Charset = DEFAULT_CHARSET
-    ProgressBar.ProgressFont.Color = clWindowText
-    ProgressBar.ProgressFont.Height = -11
-    ProgressBar.ProgressFont.Name = 'Tahoma'
-    ProgressBar.ProgressFont.Style = []
-    ProgressBar.ValueFormat = '%.0f%%'
-    ProgressBar.Step = 10.000000000000000000
-    ProgressBar.Maximum = 100.000000000000000000
-    Items = <>
-    ListItems = <>
-    ListItemsSettings.HTMLFont.Charset = DEFAULT_CHARSET
-    ListItemsSettings.HTMLFont.Color = clWindowText
-    ListItemsSettings.HTMLFont.Height = -11
-    ListItemsSettings.HTMLFont.Name = 'Tahoma'
-    ListItemsSettings.HTMLFont.Style = []
-    TopLayerItems = <>
-    Left = 184
-    Top = 456
-  end
   object nxsqlngn1: TnxSqlEngine
     EventLog = nxvntlg1
     ActiveDesigntime = True
     StmtLogging = False
     StmtLogTableName = 'QueryLog'
+    UseFieldCache = False
     Left = 264
     Top = 216
   end
@@ -4210,8 +4146,164 @@ object fmMain: TfmMain
     TableName = 'Items'
     Left = 32
     Top = 384
+    object nxtblItemsid: TUnsignedAutoIncField
+      FieldName = 'id'
+    end
+    object nxtblItemsSiteID: TStringField
+      FieldName = 'SiteID'
+      Size = 50
+    end
+    object nxtblItemsTitle: TStringField
+      FieldName = 'Title'
+      Size = 55
+    end
+    object nxtblItemsSubTitle: TStringField
+      FieldName = 'SubTitle'
+      Size = 55
+    end
+    object nxtblItemsPrimaryCategory: TLargeintField
+      FieldName = 'PrimaryCategory'
+    end
+    object nxtblItemsSecondaryCategory: TLargeintField
+      FieldName = 'SecondaryCategory'
+    end
+    object nxtblItemsCurrency: TStringField
+      FieldName = 'Currency'
+      Size = 3
+    end
+    object nxtblItemsPrice: TExtendedField
+      FieldName = 'Price'
+      Precision = 19
+    end
+    object nxtblItemsReservePrice: TExtendedField
+      FieldName = 'ReservePrice'
+      Precision = 19
+    end
+    object nxtblItemsBuyItNowPrice: TExtendedField
+      FieldName = 'BuyItNowPrice'
+      Precision = 19
+    end
+    object nxtblItemsListingType: TStringField
+      FieldName = 'ListingType'
+      Size = 30
+    end
+    object nxtblItemsQuantity: TIntegerField
+      FieldName = 'Quantity'
+    end
+    object nxtblItemsLotSize: TIntegerField
+      FieldName = 'LotSize'
+    end
+    object nxtblItemsAuctionDuration: TStringField
+      FieldName = 'AuctionDuration'
+    end
+    object nxtblItemsPrivateListing: TBooleanField
+      FieldName = 'PrivateListing'
+    end
+    object nxtblItemsShippingService1: TIntegerField
+      FieldName = 'ShippingService1'
+    end
+    object nxtblItemsSS1Price: TExtendedField
+      FieldName = 'SS1Price'
+      Precision = 19
+    end
+    object nxtblItemsShippingService2: TIntegerField
+      FieldName = 'ShippingService2'
+    end
+    object nxtblItemsSS2Price: TExtendedField
+      FieldName = 'SS2Price'
+      Precision = 19
+    end
+    object nxtblItemsShippingService3: TIntegerField
+      FieldName = 'ShippingService3'
+    end
+    object nxtblItemsSS3Price: TExtendedField
+      FieldName = 'SS3Price'
+      Precision = 19
+    end
+    object nxtblItemsSS1Insurance: TExtendedField
+      FieldName = 'SS1Insurance'
+      Precision = 19
+    end
+    object nxtblItemsSS2Insurance: TExtendedField
+      FieldName = 'SS2Insurance'
+      Precision = 19
+    end
+    object nxtblItemsSS3Insurance: TExtendedField
+      FieldName = 'SS3Insurance'
+      Precision = 19
+    end
+    object nxtblItemsInShippingService1: TIntegerField
+      FieldName = 'InShippingService1'
+    end
+    object nxtblItemsISS1Price: TExtendedField
+      FieldName = 'ISS1Price'
+      Precision = 19
+    end
+    object nxtblItemsInShippingService2: TIntegerField
+      FieldName = 'InShippingService2'
+    end
+    object nxtblItemsISS2Price: TExtendedField
+      FieldName = 'ISS2Price'
+      Precision = 19
+    end
+    object nxtblItemsInShippingService3: TIntegerField
+      FieldName = 'InShippingService3'
+    end
+    object nxtblItemsISS3Price: TExtendedField
+      FieldName = 'ISS3Price'
+      Precision = 19
+    end
+    object nxtblItemsISS1Insurance: TExtendedField
+      FieldName = 'ISS1Insurance'
+      Precision = 19
+    end
+    object nxtblItemsISS2Insurance: TExtendedField
+      FieldName = 'ISS2Insurance'
+      Precision = 19
+    end
+    object nxtblItemsISS3Insurance: TExtendedField
+      FieldName = 'ISS3Insurance'
+      Precision = 19
+    end
+    object nxtblItemsInsuranceOptions: TStringField
+      FieldName = 'InsuranceOptions'
+      Size = 40
+    end
+    object nxtblItemsDescription: TnxMemoField
+      FieldName = 'Description'
+      BlobType = ftMemo
+    end
+    object nxtblItemsPaymentMethods: TStringField
+      FieldName = 'PaymentMethods'
+      Size = 200
+    end
+    object nxtblItemsShipToLocations: TStringField
+      FieldName = 'ShipToLocations'
+      Size = 200
+    end
+    object nxtblItemsPaymentPolicy: TnxMemoField
+      FieldName = 'PaymentPolicy'
+      BlobType = ftMemo
+    end
+    object nxtblItemsRP_Description: TnxMemoField
+      FieldName = 'RP_Description'
+      BlobType = ftMemo
+    end
+    object nxtblItemsPR_Refund: TStringField
+      FieldName = 'PR_Refund'
+    end
+    object nxtblItemsRP_ReturnsWithin: TStringField
+      FieldName = 'RP_ReturnsWithin'
+    end
+    object nxtblItemsRP_ReturnsAccepted: TStringField
+      FieldName = 'RP_ReturnsAccepted'
+      Size = 50
+    end
+    object nxtblItemsRP_ShippingCostPaidBy: TStringField
+      FieldName = 'RP_ShippingCostPaidBy'
+    end
   end
-  object ds1: TDataSource
+  object dsItems: TDataSource
     DataSet = nxtblItems
     Left = 96
     Top = 384
