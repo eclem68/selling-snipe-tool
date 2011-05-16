@@ -41,14 +41,14 @@ object fmItemEditor: TfmItemEditor
       end
       object lbl2: TLabel
         Left = 16
-        Top = 33
+        Top = 92
         Width = 36
         Height = 13
         Caption = 'Subtitle'
       end
       object lbl3: TLabel
-        Left = 16
-        Top = 61
+        Left = 13
+        Top = 116
         Width = 52
         Height = 13
         Caption = 'Categories'
@@ -96,8 +96,8 @@ object fmItemEditor: TfmItemEditor
         Caption = 'Lot size'
       end
       object JvSpeedButton1: TJvSpeedButton
-        Left = 500
-        Top = 113
+        Left = 503
+        Top = 168
         Width = 25
         Height = 25
         Glyph.Data = {
@@ -135,8 +135,8 @@ object fmItemEditor: TfmItemEditor
         OnClick = JvSpeedButton1Click
       end
       object JvSpeedButton2: TJvSpeedButton
-        Left = 500
-        Top = 140
+        Left = 503
+        Top = 195
         Width = 25
         Height = 25
         Glyph.Data = {
@@ -187,7 +187,7 @@ object fmItemEditor: TfmItemEditor
       object cxdbtxtdt2: TcxDBTextEdit
         Tag = 4
         Left = 58
-        Top = 34
+        Top = 89
         DataBinding.DataField = 'SubTitle'
         DataBinding.DataSource = dsItems
         Properties.ClearKey = 46
@@ -196,8 +196,8 @@ object fmItemEditor: TfmItemEditor
         Width = 468
       end
       object cxpgcntrl2: TcxPageControl
-        Left = 13
-        Top = 80
+        Left = 16
+        Top = 135
         Width = 481
         Height = 89
         ActivePage = cxtbsht4
@@ -214,7 +214,6 @@ object fmItemEditor: TfmItemEditor
         object cxtbsht4: TcxTabSheet
           Caption = 'Tree selection'
           ImageIndex = 0
-          ExplicitWidth = 487
           object lbl4: TLabel
             Left = 18
             Top = 16
@@ -305,7 +304,6 @@ object fmItemEditor: TfmItemEditor
         object cxtbsht5: TcxTabSheet
           Caption = 'Keyword suggested'
           ImageIndex = 1
-          ExplicitWidth = 507
           object lbl6: TLabel
             Left = 18
             Top = 16
