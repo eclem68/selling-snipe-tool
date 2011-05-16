@@ -25,10 +25,10 @@ object fmItemEditor: TfmItemEditor
     ActivePage = cxtbsht1
     Align = alClient
     TabOrder = 0
-    ClientRectBottom = 573
-    ClientRectLeft = 3
-    ClientRectRight = 1052
-    ClientRectTop = 23
+    ClientRectBottom = 572
+    ClientRectLeft = 2
+    ClientRectRight = 1051
+    ClientRectTop = 22
     object cxtbsht1: TcxTabSheet
       Caption = 'General info'
       ImageIndex = 0
@@ -207,10 +207,10 @@ object fmItemEditor: TfmItemEditor
         TabSlants.Kind = skCutCorner
         TabSlants.Positions = []
         OnChange = cxpgcntrl2Change
-        ClientRectBottom = 86
-        ClientRectLeft = 3
-        ClientRectRight = 478
-        ClientRectTop = 23
+        ClientRectBottom = 85
+        ClientRectLeft = 2
+        ClientRectRight = 477
+        ClientRectTop = 22
         object cxtbsht4: TcxTabSheet
           Caption = 'Tree selection'
           ImageIndex = 0
@@ -254,7 +254,7 @@ object fmItemEditor: TfmItemEditor
             TreeViewSortType = stText
             DisplayField = 'CategoryName'
             DividedChar = '.'
-            ListSource = ds1
+            ListSource = ds2
             KeyField = 'CategoryID'
             ListField = 'CategoryName'
             Options = [trSmartRecordLoad, trSmartRecordCopy, trCheckHasChildren]
@@ -290,7 +290,7 @@ object fmItemEditor: TfmItemEditor
             TreeViewSortType = stText
             DisplayField = 'CategoryName'
             DividedChar = '.'
-            ListSource = ds1
+            ListSource = ds2
             KeyField = 'CategoryID'
             ListField = 'CategoryName'
             Options = [trCanDBNavigate, trSmartRecordLoad, trSmartRecordCopy, trCheckHasChildren]
@@ -480,10 +480,10 @@ object fmItemEditor: TfmItemEditor
         TabOrder = 12
         TabSlants.Kind = skCutCorner
         TabSlants.Positions = []
-        ClientRectBottom = 215
-        ClientRectLeft = 3
-        ClientRectRight = 510
-        ClientRectTop = 23
+        ClientRectBottom = 214
+        ClientRectLeft = 2
+        ClientRectRight = 509
+        ClientRectTop = 22
         object cxtbsht6: TcxTabSheet
           Caption = 'Domestic shipping'
           ImageIndex = 0

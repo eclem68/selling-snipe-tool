@@ -1,0 +1,2 @@
+{_$DEFINE DEMO }
+{$DEFINE INDY10}
