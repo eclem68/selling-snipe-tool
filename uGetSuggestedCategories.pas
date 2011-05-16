@@ -174,7 +174,7 @@ begin
   end;
   FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Request.xml');
   hlog.Add('Request XML saved');
-  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Response.xml');
+  FEbayTradingConnect.ResponseXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Response.xml');
   hlog.Add('Response XML saved');
 end;
 
@@ -196,7 +196,7 @@ begin
   hLog.AddException(E);
   FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Request.xml');
   hlog.Add('Request XML saved');
-  FEbayTradingConnect.RequestXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Response.xml');
+  FEbayTradingConnect.ResponseXMLText.SaveToFile(hLog.hlWriter.hlFileDef.path+'\Response.xml');
   hlog.Add('Response XML saved');
 end;
 

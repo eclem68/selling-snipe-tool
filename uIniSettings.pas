@@ -232,14 +232,16 @@ begin
         Token := ReadString(env_str, 'Token', '');
       end;
 {$ENDIF}
+      with FIniFile, ebay do begin
+        Host := FIniFile.ReadString(env_str, 'Host', 'api.ebay.com');
+        ServiceURL := ReadString(env_str, 'ServiceURL', 'https://api.ebay.com/ws/api.dll');
+      end;
       FtmpString := FIniFile.ReadString('separator', 'DecimalSeparator',
         GetLocaleInformation(LOCALE_SDECIMAL));
       separator.DecimalSeparator := FtmpString[1];
       FtmpString := FIniFile.ReadString('separator', 'CSVSeparator', ';');
       separator.CSVSeparator := FtmpString[1];
-      with FIniFile, ebay, SSLSettings do begin
-        Host := FIniFile.ReadString(env_str, 'Host', 'api.ebay.com');
-        ServiceURL := ReadString(env_str, 'ServiceURL', 'https://api.ebay.com/ws/api.dll');
+      with FIniFile, SSLSettings do begin
         SSLCertFile := ReadString('ssl', 'SSLCertFile', 'test_b_crt.pem');
         SSLKeyFile := ReadString('ssl', 'SSLKeyFile', 'test_b_key.pem');
         SSLRootCertFile := ReadString('ssl', 'SSLRootCertFile', 'test_b_ca.pem');

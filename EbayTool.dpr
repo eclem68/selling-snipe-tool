@@ -1,7 +1,6 @@
 program EbayTool;
 
 uses
-  ExceptionLog,
   Forms,
   HotLog,
   uMain in 'uMain.pas' {fmMain},
